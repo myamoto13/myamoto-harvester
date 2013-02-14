@@ -1,12 +1,12 @@
-package com.extia.webscraper.viadeo.entrypoints;
+package com.extia.webscraper.entrypoints;
 import org.apache.log4j.Logger;
 
 import com.extia.webscraper.exception.ScrapperException;
 import com.extia.webscraper.io.ScrappingHistoryXmlIO;
-import com.extia.webscraper.viadeo.ViadeoScraper;
-import com.extia.webscraper.viadeo.system.ScraperSystemFilesFactory;
-import com.extia.webscraper.viadeo.system.ScrappingSettings;
-import com.extia.webscraper.viadeo.system.ViadeoProperties;
+import com.extia.webscraper.scraper.ViadeoScraper;
+import com.extia.webscraper.system.ScraperSystemFilesFactory;
+import com.extia.webscraper.system.ScrappingSettings;
+import com.extia.webscraper.system.ViadeoProperties;
 
 public class ViadeoScrapperLauncher {
 

@@ -1,4 +1,4 @@
-package com.extia.webscraper.viadeo.entrypoints;
+package com.extia.webscraper.entrypoints;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GradientPaint;
@@ -15,9 +15,9 @@ import javax.swing.UIManager;
 
 import org.apache.log4j.Logger;
 
-import com.extia.webscraper.viadeo.ViadeoScraper;
-import com.extia.webscraper.viadeo.ui.scrapper.GUIViadeoScrapper;
-import com.extia.webscraper.viadeo.ui.setting.GUIViadeoScrappingSettings;
+import com.extia.webscraper.scraper.ViadeoScraper;
+import com.extia.webscraper.ui.scrapper.GUIViadeoScrapper;
+import com.extia.webscraper.ui.setting.GUIViadeoScrappingSettings;
 
 public class GUIViadeoScrapperLauncher {
 	

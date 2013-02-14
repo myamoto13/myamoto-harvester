@@ -1,4 +1,4 @@
-package com.extia.webscraper.viadeo.system;
+package com.extia.webscraper.system;
 import java.util.Arrays;
 import java.util.List;
 

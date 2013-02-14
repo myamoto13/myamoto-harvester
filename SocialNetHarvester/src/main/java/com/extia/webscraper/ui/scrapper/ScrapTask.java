@@ -1,12 +1,12 @@
-package com.extia.webscraper.viadeo.ui.scrapper;
+package com.extia.webscraper.ui.scrapper;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.SwingWorker;
 
-import com.extia.webscraper.viadeo.ViadeoScraper;
-import com.extia.webscraper.viadeo.ViadeoScraper.ScrapingProgressListener;
+import com.extia.webscraper.scraper.ViadeoScraper;
+import com.extia.webscraper.scraper.ViadeoScraper.ScrapingProgressListener;
 
 class ScrapTask extends SwingWorker<Void, Void> {
     private List<String> keyWordsList;
