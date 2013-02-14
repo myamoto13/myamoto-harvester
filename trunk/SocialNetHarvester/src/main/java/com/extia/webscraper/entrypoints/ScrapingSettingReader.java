@@ -1,4 +1,4 @@
-package com.extia.webscraper.viadeo.entrypoints;
+package com.extia.webscraper.entrypoints;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -7,7 +7,7 @@ import java.util.Properties;
 import org.apache.log4j.Logger;
 
 import com.extia.webscraper.exception.ScrapperException;
-import com.extia.webscraper.viadeo.system.ScrappingSettings;
+import com.extia.webscraper.system.ScrappingSettings;
 
 public class ScrapingSettingReader {
 	static Logger logger = Logger.getLogger(GUIViadeoScrapperLauncher.class);

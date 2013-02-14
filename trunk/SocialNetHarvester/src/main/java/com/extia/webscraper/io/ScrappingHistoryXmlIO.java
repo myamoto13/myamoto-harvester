@@ -31,8 +31,8 @@ import org.xml.sax.SAXException;
 import com.extia.webscraper.data.ScrappingHistory;
 import com.extia.webscraper.data.UrlConnectionWrapper;
 import com.extia.webscraper.exception.ScrapperException;
-import com.extia.webscraper.viadeo.system.ScraperSystemFilesFactory;
-import com.extia.webscraper.viadeo.system.ScrappingSettings;
+import com.extia.webscraper.system.ScraperSystemFilesFactory;
+import com.extia.webscraper.system.ScrappingSettings;
 
 public class ScrappingHistoryXmlIO {
 	

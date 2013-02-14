@@ -1,4 +1,4 @@
-package com.extia.webscraper.viadeo.data;
+package com.extia.webscraper.data;
 
 
 public class ViadeoPerson {

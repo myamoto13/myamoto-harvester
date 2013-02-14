@@ -1,4 +1,4 @@
-package com.extia.webscraper.viadeo;
+package com.extia.webscraper;
 
 public class HTTPStatusFactory {
 /*

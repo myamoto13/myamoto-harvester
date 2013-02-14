@@ -1,4 +1,4 @@
-package com.extia.webscraper.viadeo.ui.scrapper;
+package com.extia.webscraper.ui.scrapper;
 
 import java.awt.Component;
 import java.awt.Cursor;
@@ -21,8 +21,8 @@ import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
-import com.extia.webscraper.viadeo.ui.common.HyperlinkBuilder;
-import com.extia.webscraper.viadeo.ui.scrapper.MViadeoScraper.MViadeoScraperListener;
+import com.extia.webscraper.ui.common.HyperlinkBuilder;
+import com.extia.webscraper.ui.scrapper.MViadeoScraper.MViadeoScraperListener;
 
 public class VViadeoScraper implements MViadeoScraperListener {
 	

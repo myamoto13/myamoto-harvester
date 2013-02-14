@@ -1,10 +1,10 @@
-package com.extia.webscraper.viadeo.ui.scrapper;
+package com.extia.webscraper.ui.scrapper;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.extia.webscraper.viadeo.ViadeoScraper;
+import com.extia.webscraper.scraper.ViadeoScraper;
 
 public class MViadeoScraper {
 	

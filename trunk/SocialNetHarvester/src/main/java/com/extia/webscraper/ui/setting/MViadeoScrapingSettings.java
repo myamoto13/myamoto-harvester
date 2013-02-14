@@ -1,4 +1,4 @@
-package com.extia.webscraper.viadeo.ui.setting;
+package com.extia.webscraper.ui.setting;
 
 import java.util.ArrayList;
 import java.util.List;

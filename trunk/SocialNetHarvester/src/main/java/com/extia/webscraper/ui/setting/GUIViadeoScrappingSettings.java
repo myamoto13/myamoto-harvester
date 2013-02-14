@@ -1,8 +1,8 @@
-package com.extia.webscraper.viadeo.ui.setting;
+package com.extia.webscraper.ui.setting;
 
 import javax.swing.JPanel;
 
-import com.extia.webscraper.viadeo.ui.setting.VViadeoScrapingSettings.VViadeoScrapingSettingsListener;
+import com.extia.webscraper.ui.setting.VViadeoScrapingSettings.VViadeoScrapingSettingsListener;
 
 
 

@@ -1,4 +1,4 @@
-package com.extia.webscraper.viadeo.ui.setting;
+package com.extia.webscraper.ui.setting;
 
 import java.awt.Component;
 import java.awt.GridBagLayout;
@@ -8,7 +8,7 @@ import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import com.extia.webscraper.viadeo.ui.setting.MViadeoScrapingSettings.MViadeoScrapingSettingsListener;
+import com.extia.webscraper.ui.setting.MViadeoScrapingSettings.MViadeoScrapingSettingsListener;
 
 public class VViadeoScrapingSettings implements MViadeoScrapingSettingsListener {
 

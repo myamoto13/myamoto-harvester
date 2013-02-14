@@ -1,4 +1,4 @@
-package com.extia.webscraper.viadeo;
+package com.extia.webscraper.scraper;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -38,19 +38,19 @@ import org.xml.sax.SAXException;
 
 import com.extia.webscraper.data.ScrappingHistory;
 import com.extia.webscraper.data.UrlConnectionWrapper;
+import com.extia.webscraper.data.ViadeoPerson;
 import com.extia.webscraper.exception.ScrapperException;
 import com.extia.webscraper.io.ScrappingHistoryXmlIO;
-import com.extia.webscraper.viadeo.data.ViadeoPerson;
-import com.extia.webscraper.viadeo.system.ScraperSystemFilesFactory;
-import com.extia.webscraper.viadeo.system.ScrappingSettings;
-import com.extia.webscraper.viadeo.system.ViadeoProperties;
+import com.extia.webscraper.system.ScraperSystemFilesFactory;
+import com.extia.webscraper.system.ScrappingSettings;
+import com.extia.webscraper.system.ViadeoProperties;
 
 /**
  * @author hp
  *
  */
 public class ViadeoScraper {
-
+	
 	static Logger logger = Logger.getLogger(ViadeoScraper.class);
 
 	private Map<String,String> cookies;
@@ -146,9 +146,6 @@ public class ViadeoScraper {
 		this.scrappingSettings = scrappingSettings;
 	}
 
-	/*
-	 * End of POJO get/set
-	 */
 
 	public void connectToViadeo() throws Exception{
 		int requestsTimeout = getRequestTimeout();
@@ -728,5 +725,4 @@ public class ViadeoScraper {
 		
 		System.out.println(result);
 	}
-
 }

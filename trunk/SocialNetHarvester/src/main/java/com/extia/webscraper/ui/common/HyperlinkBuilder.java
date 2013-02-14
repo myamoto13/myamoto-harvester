@@ -1,4 +1,4 @@
-package com.extia.webscraper.viadeo.ui.common;
+package com.extia.webscraper.ui.common;
 
 import java.awt.Color;
 import java.awt.Cursor;

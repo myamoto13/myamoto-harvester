@@ -1,4 +1,4 @@
-package com.extia.webscraper.viadeo.ui.scrapper;
+package com.extia.webscraper.ui.scrapper;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -7,10 +7,10 @@ import java.util.Arrays;
 
 import javax.swing.JPanel;
 
-import com.extia.webscraper.viadeo.ViadeoScraper;
-import com.extia.webscraper.viadeo.ui.scrapper.ScrapTask.ScrapTaskListener;
-import com.extia.webscraper.viadeo.ui.scrapper.VViadeoScraper.VViadeoScraperListener;
-import com.extia.webscraper.viadeo.ui.setting.GUIViadeoScrappingSettings;
+import com.extia.webscraper.scraper.ViadeoScraper;
+import com.extia.webscraper.ui.scrapper.ScrapTask.ScrapTaskListener;
+import com.extia.webscraper.ui.scrapper.VViadeoScraper.VViadeoScraperListener;
+import com.extia.webscraper.ui.setting.GUIViadeoScrappingSettings;
 
 public class GUIViadeoScrapper implements VViadeoScraperListener {
 
