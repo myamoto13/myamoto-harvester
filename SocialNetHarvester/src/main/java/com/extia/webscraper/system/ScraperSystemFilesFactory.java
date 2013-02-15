@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import com.extia.webscraper.exception.ScrapperException;
+import com.extia.webscraper.exception.ScraperException;
 
 public class ScraperSystemFilesFactory {
 	
@@ -23,49 +23,49 @@ public class ScraperSystemFilesFactory {
 		this.scrappingSettings = scrappingSettings;
 	}
 
-	public File getKeyWordsReportFile() throws IOException, ScrapperException{
+	public File getKeyWordsReportFile() throws IOException, ScraperException{
 		if(keyWordsReportFile == null){
 			keyWordsReportFile = createAndBackup(getScrappingSettings().getKeyWordsReportFilePath());
 		}
 		return keyWordsReportFile;
 	}
 
-	public File getResultFile() throws IOException, ScrapperException {
+	public File getResultFile() throws IOException, ScraperException {
 		if(resultFile == null){
 			resultFile = createAndBackup(getScrappingSettings().getResultFilePath());
 		}
 		return resultFile;
 	}
 
-	public String getResultFilePath() throws IOException, ScrapperException{
+	public String getResultFilePath() throws IOException, ScraperException{
 		return getResultFile().getAbsolutePath();
 	}
 	
-	private File getWortkingDir() throws ScrapperException{
+	private File getWortkingDir() throws ScraperException{
 		return createAndeBackupDir(new File(getScrappingSettings().getWorkingDirPath()));
 	}
 	
-	private File getBackupDir() throws ScrapperException{
+	private File getBackupDir() throws ScraperException{
 		return createAndeBackupDir(new File(getWortkingDir(), "backup"));
 	}
 	
-	public File getHistoryDir() throws ScrapperException{
+	public File getHistoryDir() throws ScraperException{
 		return createAndeBackupDir(new File(getWortkingDir(), "history"));
 	}
 	
-	private File createAndeBackupDir(File dir) throws ScrapperException{
+	private File createAndeBackupDir(File dir) throws ScraperException{
 		if(!(dir.exists() || dir.mkdir())){
-			throw new ScrapperException("Le répertoire " + dir.getAbsolutePath() +" n'existe pas et ne peut être créé.");
+			throw new ScraperException("Le répertoire " + dir.getAbsolutePath() +" n'existe pas et ne peut être créé.");
 		}
 		return dir;
 	}
 
-	private File createAndBackup(String filePath) throws IOException, ScrapperException{
+	private File createAndBackup(String filePath) throws IOException, ScraperException{
 		File result = null;
 		if(filePath != null){
 			File backupDir = getBackupDir();
 			if(!backupDir.exists() || !backupDir.isDirectory()){
-				throw new ScrapperException("Le répertoire " + backupDir.getAbsolutePath() +" n'existe pas. Veuillez le créer.");
+				throw new ScraperException("Le répertoire " + backupDir.getAbsolutePath() +" n'existe pas. Veuillez le créer.");
 			}else{
 				result = new File(filePath);
 

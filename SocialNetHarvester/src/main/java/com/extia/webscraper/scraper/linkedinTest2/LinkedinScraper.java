@@ -36,7 +36,7 @@ import org.scribe.oauth.OAuthService;
 
 import com.extia.webscraper.data.ScrappingHistory;
 import com.extia.webscraper.data.UrlConnectionWrapper;
-import com.extia.webscraper.exception.ScrapperException;
+import com.extia.webscraper.exception.ScraperException;
 import com.extia.webscraper.io.ScrappingHistoryXmlIO;
 import com.extia.webscraper.system.ScraperSystemFilesFactory;
 import com.extia.webscraper.system.ScrappingSettings;
@@ -249,12 +249,12 @@ public class LinkedinScraper {
 		return getScrappingSettings().getHttpCallsDelay();
 	}
 
-	private String getResultFilePath() throws IOException, ScrapperException {
+	private String getResultFilePath() throws IOException, ScraperException {
 		return getSystemFilesFactory().getResultFilePath();
 	}
 
 
-	private HashSet<String> getNameSet() throws IOException, ScrapperException {
+	private HashSet<String> getNameSet() throws IOException, ScraperException {
 		if(nameSet == null){
 			nameSet = new HashSet<String>();
 			List<String> lineList = Files.readAllLines(Paths.get(getResultFilePath()), StandardCharsets.UTF_8);

@@ -1,19 +1,10 @@
 package com.extia.webscraper.scraper;
 
-import java.io.BufferedWriter;
-import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.OpenOption;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -30,7 +21,6 @@ import org.jsoup.Connection;
 import org.jsoup.Connection.Method;
 import org.jsoup.Connection.Response;
 import org.jsoup.Jsoup;
-import org.jsoup.helper.StringUtil;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -39,8 +29,11 @@ import org.xml.sax.SAXException;
 import com.extia.webscraper.data.ScrappingHistory;
 import com.extia.webscraper.data.UrlConnectionWrapper;
 import com.extia.webscraper.data.ViadeoPerson;
-import com.extia.webscraper.exception.ScrapperException;
+import com.extia.webscraper.exception.ScraperException;
+import com.extia.webscraper.io.FileIO;
 import com.extia.webscraper.io.ScrappingHistoryXmlIO;
+import com.extia.webscraper.io.csv.CSVKeywordReportIO;
+import com.extia.webscraper.io.csv.CSVPersonListIO;
 import com.extia.webscraper.system.ScraperSystemFilesFactory;
 import com.extia.webscraper.system.ScrappingSettings;
 import com.extia.webscraper.system.ViadeoProperties;
@@ -64,10 +57,39 @@ public class ViadeoScraper {
 	private Map<String, PositionAvancement> avancementMap;
 	private ScraperSystemFilesFactory systemFilesFactory;
 	
+	private FileIO keywordListFileIO;
+
+	private CSVKeywordReportIO cSVWriterKeywordReport;
+	private CSVPersonListIO cSVWriterResult;
+	
 	private boolean interruptFlag;
 
 	public ViadeoScraper() {
 		scrapingProgressListenerList = new ArrayList<ViadeoScraper.ScrapingProgressListener>();
+	}
+	
+	private FileIO getKeywordListFileIO() {
+		return keywordListFileIO;
+	}
+
+	public void setKeywordListFileIO(FileIO keywordListFileIO) {
+		this.keywordListFileIO = keywordListFileIO;
+	}
+	
+	private CSVKeywordReportIO getcSVWriterKeywordReport() {
+		return cSVWriterKeywordReport;
+	}
+
+	public void setcSVWriterKeywordReport(CSVKeywordReportIO cSVWriterKeywordReport) {
+		this.cSVWriterKeywordReport = cSVWriterKeywordReport;
+	}
+
+	private CSVPersonListIO getcSVWriterResult() {
+		return cSVWriterResult;
+	}
+
+	public void setcSVWriterResult(CSVPersonListIO cSVWriterResult) {
+		this.cSVWriterResult = cSVWriterResult;
 	}
 
 	public boolean addScrapingProgressListener(ScrapingProgressListener scrapingProgressListener){
@@ -93,8 +115,22 @@ public class ViadeoScraper {
 	private int getMaximumScrapableResults(){
 		return getViadeoProperties().getMaximumSearchResults();
 	}
+	
+	private Map<String, PositionAvancement> getAvancementMap(){
+		if(avancementMap == null){
+			avancementMap = new HashMap<String, PositionAvancement>();
+		}
+		return avancementMap;
+	}
 
-	private ScrappingHistory getHistory() throws XPathExpressionException, ParserConfigurationException, SAXException, IOException, ParseException, TransformerException, ScrapperException {
+	private Map<UrlConnectionWrapper, Document> getDomBufferMap(){
+		if(domBufferMap == null){
+			domBufferMap = new HashMap<UrlConnectionWrapper, Document>();
+		}
+		return domBufferMap;
+	}
+
+	private ScrappingHistory getHistory() throws XPathExpressionException, ParserConfigurationException, SAXException, IOException, ParseException, TransformerException, ScraperException {
 		if(history == null){
 			logger.info("loading history..");
 			history = getScrappingHistoryXml().readScrappingHistory();
@@ -193,166 +229,129 @@ public class ViadeoScraper {
 	}
 
 	public List<String> getKeyWordList() throws IOException {
-		return Files.readAllLines(Paths.get(getScrappingSettings().getKeyWordListFilePath()), StandardCharsets.UTF_8);
+		return getKeywordListFileIO().read();
 	}
 
 	public void scrapDatas(List<String> keyWordList) throws Exception{
 		if(keyWordList != null){
-			BufferedWriter keyWordReportFW = null;
-			try{
+			fireScrapingProgressUpdated(0);
+			getcSVWriterKeywordReport().writeTitle();
+
+			//retrieve result number for each keyWord
+			//TODO retrieve it from History ?
+			Map<String, List<UrlConnectionWrapper>> urlsForKeywordsMap = new HashMap<String, List<UrlConnectionWrapper>>();
+			int indexKeywords = 0;
+			getDomBufferMap().clear();
+			getAvancementMap().clear();
+			for (String keyWords : keyWordList) {
 				fireScrapingProgressUpdated(0);
-				File keyWordsReportFile = getSystemFilesFactory().getKeyWordsReportFile();
-				keyWordReportFW = Files.newBufferedWriter(Paths.get(keyWordsReportFile.getAbsolutePath()), StandardCharsets.UTF_8, new OpenOption[] {StandardOpenOption.WRITE});
-				keyWordReportFW.append(StringUtil.join(Arrays.asList(new String[]{"keyWords", "nbResultsRetrieved", "nbResults"}), ";"));
-				keyWordReportFW.close();
 
-				//retrieve result number for each keyWord
-				//TODO retrieve it from History ?
-				Map<String, List<UrlConnectionWrapper>> urlsForKeywordsMap = new HashMap<String, List<UrlConnectionWrapper>>();
-				int indexKeywords = 0;
-				getDomBufferMap().clear();
-				getAvancementMap().clear();
-				for (String keyWords : keyWordList) {
-
-					fireScrapingProgressUpdated(0);
-
-					if(isInterruptFlag()){
-						logger.info("interuption called. Stopping search for keywords (" + keyWordList.size() + ").");
-						break;
-					}else{
-						if(isKeywordsValid(keyWords) && urlsForKeywordsMap.get(keyWords) == null ){
-							logger.info("searching urls for keywords '" + keyWords + "'");
-
-							fireScrapingKeyWordsStarted(keyWords);
-
-
-							fireScrapingProgressUpdated(Math.round(((float)indexKeywords / (float)keyWordList.size())*100));
-							indexKeywords++;
-
-							UrlConnectionWrapper viadeoConWra = new UrlConnectionWrapper();
-							viadeoConWra.setUrl(getViadeoProperties().getViadeoSearchUrl());
-							viadeoConWra.setUserAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6");
-							viadeoConWra.setReferer(getViadeoUrl());
-							viadeoConWra.setTimeout(getRequestTimeout());
-							viadeoConWra.addCookies(getCookies());
-							viadeoConWra.putPostParameter("ga_from", "Tfrom:search-members;Bfrom:default-form;Efrom:;");
-							viadeoConWra.putPostParameter("fullName", "");
-							viadeoConWra.putPostParameter("keywords", "\"" + keyWords + "\"");
-							viadeoConWra.putPostParameter("search", "Chercher");
-							viadeoConWra.putPostParameter("company", "");
-							viadeoConWra.putPostParameter("companyExactSearch", "on");
-							viadeoConWra.putPostParameter("position", "");
-							viadeoConWra.putPostParameter("positionExactSearch", "off");
-							viadeoConWra.putPostParameter("schoolName", "");
-							viadeoConWra.putPostParameter("sector", "on");
-							viadeoConWra.putPostParameter("town", "");
-							viadeoConWra.putPostParameter("countryForm", "");
-							viadeoConWra.putPostParameter("county", "");
-							viadeoConWra.putPostParameter("joinDateId", "0020");
-							viadeoConWra.putPostParameter("language", "");
-							viadeoConWra.putPostParameter("btnRadio", "0020");
-
-							ScrappingHistory history = getHistory();
-
-							List<UrlConnectionWrapper> urlConnexionToScrapList = getSearchUrlList(viadeoConWra);
-							if(urlConnexionToScrapList != null) {
-
-								int nbResultsRetrieved = 0;
-								for (UrlConnectionWrapper urlConWra : urlConnexionToScrapList) {
-									Document dom = getDomBufferMap().get(urlConWra);
-									Elements h1NbElementsResult = dom.select("div[class=searchResultsTitleWrapper pal] h1[class=fl mrs]");
-									int nbResultsSubConnec = getInteger(h1NbElementsResult.text());
-									nbResultsRetrieved += Math.min(nbResultsSubConnec, getMaximumScrapableResults());
-
-								}
-
-								Connection connection = viadeoConWra.getConnection(getCookies());
-								Document dom = connection.execute().parse();
-								Thread.sleep(getHttpCallsDelay());
-
-								Elements h1NbElements = dom.select("div[class=searchResultsTitleWrapper pal] h1[class=fl mrs]");
-								int nbResults = getInteger(h1NbElements.text());
-
-								logger.debug(nbResultsRetrieved + " results out of " + nbResults + " will be retrieved For keywords : '" + keyWords + "'");
-								getAvancementMap().put(keyWords, new PositionAvancement(nbResultsRetrieved, 0));
-
-								/*
-								 * TODO 
-								 * for each parent URL, add the last child URL for which scrapped started.
-								 * for now, history will make the search start from the last keyword being searched.
-								 * It'd be better to start from the last page.
-								 */
-								for (Iterator<UrlConnectionWrapper> it = urlConnexionToScrapList.iterator(); it.hasNext();) {
-									UrlConnectionWrapper conWra = it.next();
-									int index = history.getSearchConnectionList().indexOf(conWra);
-
-									if (index > -1 && history.getSearchConnectionList().get(index).isScrapped()){
-										it.remove();
-									}else{
-										history.addSearchConnection(conWra);
-									}
-								}
-								getScrappingHistoryXml().saveHistory(history);
-								
-								keyWordReportFW = Files.newBufferedWriter(Paths.get(keyWordsReportFile.getAbsolutePath()), StandardCharsets.UTF_8, new OpenOption[] {StandardOpenOption.APPEND});
-								keyWordReportFW.append(System.lineSeparator());
-								keyWordReportFW.append(StringUtil.join(Arrays.asList(new String[]{keyWords, "" + nbResultsRetrieved, "" + nbResults}), ";"));
-								keyWordReportFW.close();
-
-								/*
-								 * before scraping, set total of people to scrap for this search to keep track of progress.
-								 */
-
-
-								urlsForKeywordsMap.put(keyWords, urlConnexionToScrapList);
-							}
-						}
-					}
-				}
-				fireScrapingProgressUpdated(100);
-
-				//Scrap each keyword
-				for (String keyWords : urlsForKeywordsMap.keySet()) {
-					if(isInterruptFlag()){
-						logger.info("interuption called. Stopping scraping for keywords (" + keyWordList.size() + ").");
-						break;
-					}else{
-						logger.info("scrapping datas for keywords '" + keyWords + "'");
+				if(isInterruptFlag()){
+					logger.info("interuption called. Stopping search for keywords (" + keyWordList.size() + ").");
+					break;
+				}else{
+					if(keyWords != null && !"".equals(keyWords) && urlsForKeywordsMap.get(keyWords) == null){
+						logger.info("searching urls for keywords '" + keyWords + "'");
 
 						fireScrapingKeyWordsStarted(keyWords);
 
-						fireScrapingProgressUpdated(0);
+						fireScrapingProgressUpdated(Math.round(((float)indexKeywords / (float)keyWordList.size()) * 100));
+						
+						UrlConnectionWrapper viadeoConWra = new UrlConnectionWrapper();
+						viadeoConWra.setUrl(getViadeoProperties().getViadeoSearchUrl());
+						viadeoConWra.setUserAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6");
+						viadeoConWra.setReferer(getViadeoUrl());
+						viadeoConWra.setTimeout(getRequestTimeout());
+						viadeoConWra.addCookies(getCookies());
+						viadeoConWra.putPostParameter("ga_from", "Tfrom:search-members;Bfrom:default-form;Efrom:;");
+						viadeoConWra.putPostParameter("fullName", "");
+						viadeoConWra.putPostParameter("keywords", "\"" + keyWords + "\"");
+						viadeoConWra.putPostParameter("search", "Chercher");
+						viadeoConWra.putPostParameter("company", "");
+						viadeoConWra.putPostParameter("companyExactSearch", "on");
+						viadeoConWra.putPostParameter("position", "");
+						viadeoConWra.putPostParameter("positionExactSearch", "off");
+						viadeoConWra.putPostParameter("schoolName", "");
+						viadeoConWra.putPostParameter("sector", "on");
+						viadeoConWra.putPostParameter("town", "");
+						viadeoConWra.putPostParameter("countryForm", "");
+						viadeoConWra.putPostParameter("county", "");
+						viadeoConWra.putPostParameter("joinDateId", "0020");
+						viadeoConWra.putPostParameter("language", "");
+						viadeoConWra.putPostParameter("btnRadio", "0020");
 
-						scrapSearchPageList(urlsForKeywordsMap.get(keyWords));
+						ScrappingHistory history = getHistory();
 
-						fireScrapingProgressUpdated(100);
+						List<UrlConnectionWrapper> urlConnexionToScrapList = getSearchUrlList(viadeoConWra);
+						if(urlConnexionToScrapList != null) {
+
+							int nbResultsRetrieved = 0;
+							for (UrlConnectionWrapper urlConWra : urlConnexionToScrapList) {
+								Document dom = getDomBufferMap().get(urlConWra);
+								Elements h1NbElementsResult = dom.select("div[class=searchResultsTitleWrapper pal] h1[class=fl mrs]");
+								int nbResultsSubConnec = getInteger(h1NbElementsResult.text());
+								nbResultsRetrieved += Math.min(nbResultsSubConnec, getMaximumScrapableResults());
+
+							}
+
+							Connection connection = viadeoConWra.getConnection(getCookies());
+							Document dom = connection.execute().parse();
+							Thread.sleep(getHttpCallsDelay());
+
+							Elements h1NbElements = dom.select("div[class=searchResultsTitleWrapper pal] h1[class=fl mrs]");
+							int nbResults = getInteger(h1NbElements.text());
+
+							logger.debug(nbResultsRetrieved + " results out of " + nbResults + " will be retrieved For keywords : '" + keyWords + "'");
+							getAvancementMap().put(keyWords, new PositionAvancement(nbResultsRetrieved, 0, indexKeywords));
+
+							/*
+							 * TODO 
+							 * for each parent URL, add the last child URL for which scraping started.
+							 * for now, history will make the search start from the last keyword being searched.
+							 * It'd be better to start from the last page.
+							 */
+							for (Iterator<UrlConnectionWrapper> it = urlConnexionToScrapList.iterator(); it.hasNext();) {
+								UrlConnectionWrapper conWra = it.next();
+								int index = history.getSearchConnectionList().indexOf(conWra);
+
+								if (index > -1 && history.getSearchConnectionList().get(index).isScrapped()){
+									it.remove();
+								}else{
+									history.addSearchConnection(conWra);
+								}
+							}
+							getScrappingHistoryXml().saveHistory(history);
+							getcSVWriterKeywordReport().writeLine(keyWords, "" + nbResultsRetrieved, "" + nbResults);
+
+							/*
+							 * before scraping, set total of people to scrap for this search to keep track of progress.
+							 */
+							urlsForKeywordsMap.put(keyWords, urlConnexionToScrapList);
+						}
+						indexKeywords++;
 					}
 				}
-			}catch(Exception ex){
-				ex.printStackTrace();
-				logger.error(ex.getMessage());
-			}finally{
-				if(keyWordReportFW != null){
-					keyWordReportFW.close();
+			}
+			fireScrapingProgressUpdated(100);
+
+			//Scrap each keyword
+			fireScrapingProgressUpdated(0);
+			for (String keyWords : keyWordList) {
+				if(isInterruptFlag()){
+					logger.info("interuption called. Stopping scraping for keywords (" + keyWordList.size() + ").");
+					break;
+				}else{
+					logger.info("scrapping datas for keywords '" + keyWords + "'");
+
+					fireScrapingKeyWordsStarted(keyWords);
+
+					System.out.println(urlsForKeywordsMap.get(keyWords));
+					
+					scrapSearchPageList(urlsForKeywordsMap.get(keyWords));
 				}
 			}
+			fireScrapingProgressUpdated(100);
 		} 
-	}
-
-	public boolean isKeywordsValid(String keyWords) {
-		return keyWords != null && !"".equals(keyWords);
-	}
-
-	private void fireScrapingProgressUpdated(int progress){
-		for (ScrapingProgressListener scrapingProgressListener : scrapingProgressListenerList) {
-			scrapingProgressListener.progressUpdated(progress);
-		}
-	}
-
-	private void fireScrapingKeyWordsStarted(String keyWords) {
-		for (ScrapingProgressListener scrapingProgressListener : scrapingProgressListenerList) {
-			scrapingProgressListener.fireScrapingKeyWordsStarted(keyWords);
-		}
 	}
 
 	private String getKeyWords(UrlConnectionWrapper urlConWra) throws UnsupportedEncodingException{
@@ -369,20 +368,6 @@ public class ViadeoScraper {
 			}
 		}
 		return result;
-	}
-
-	private Map<String, PositionAvancement> getAvancementMap(){
-		if(avancementMap == null){
-			avancementMap = new HashMap<String, PositionAvancement>();
-		}
-		return avancementMap;
-	}
-
-	private Map<UrlConnectionWrapper, Document> getDomBufferMap(){
-		if(domBufferMap == null){
-			domBufferMap = new HashMap<UrlConnectionWrapper, Document>();
-		}
-		return domBufferMap;
 	}
 
 	private List<UrlConnectionWrapper> getSearchUrlList(UrlConnectionWrapper viadeoConWra) throws Exception {
@@ -484,106 +469,95 @@ public class ViadeoScraper {
 	private void scrapSearchPageList(List<UrlConnectionWrapper> searchUrlConnexionToScrapList) throws Exception {
 		String resultFilePath =  getSystemFilesFactory().getResultFilePath();
 		if(searchUrlConnexionToScrapList != null && resultFilePath != null){
-			BufferedWriter resultFW = null;
-			try{
-				resultFW = Files.newBufferedWriter(Paths.get(resultFilePath), StandardCharsets.UTF_8, new OpenOption[] {StandardOpenOption.APPEND});
 
-				File resultFile = new File(resultFilePath);
-				if(resultFile.exists() && resultFile.length() == 0){
-					resultFW.append(StringUtil.join(Arrays.asList(new String[]{"keywords", "country", "city", "name", "job", "company", "previousJob", "previousCompany", "overview", "profileLink"}), ";"));
-					resultFW.close();
-				}
+			if(getcSVWriterResult().isEmptyFile()){
+				getcSVWriterResult().writeTitle();
+			}
 
-				for (UrlConnectionWrapper searchUrlConWra : searchUrlConnexionToScrapList) {
-					if(isInterruptFlag()){
-						logger.info("interuption called, stopping list scrapping for URL list.");
-						break;
-					}else {
-						
-						UrlConnectionWrapper urlConWra = searchUrlConWra;
-						String keyWords = getKeyWords(searchUrlConWra);
-						do{
-							Thread.sleep(getHttpCallsDelay());
+			for (UrlConnectionWrapper searchUrlConWra : searchUrlConnexionToScrapList) {
+				if(isInterruptFlag()){
+					logger.info("interuption called, stopping list scrapping for URL list.");
+					break;
+				}else {
 
-							if(isInterruptFlag()){
-								logger.info("interuption called. Stopping scrapping for keyWords " + keyWords + ".");
-								break;
+					UrlConnectionWrapper urlConWra = searchUrlConWra;
+					String keyWords = getKeyWords(searchUrlConWra);
+					do{
+						Thread.sleep(getHttpCallsDelay());
+
+						if(isInterruptFlag()){
+							logger.info("interuption called. Stopping scrapping for keyWords " + keyWords + ".");
+							break;
+						}else{
+							Response res = null;
+
+							Connection con = urlConWra.getConnection(getCookies());
+
+							if(getScrappingSettings().isAutoResumeScraping()){
+								while(res == null){
+									try{
+										res = con.execute();
+									}catch(Exception ex){
+										//TODO : traiter différemment HTTP STATUS 401
+										logger.error(ex.getMessage());
+									}
+									if(res == null){
+										Thread.sleep(getHttpCallsDelay());
+									}
+								}
 							}else{
-								Response res = null;
-
-								Connection con = urlConWra.getConnection(getCookies());
-
-								if(getScrappingSettings().isAutoResumeScraping()){
-									while(res == null){
-										try{
-											res = con.execute();
-										}catch(Exception ex){
-											//TODO : traiter différemment HTTP STATUS 401
-											logger.error(ex.getMessage());
-										}
-										if(res == null){
-											Thread.sleep(getHttpCallsDelay());
-										}
-									}
-								}else{
-									res = con.execute();
-								}
+								res = con.execute();
+							}
 
 
-								Document dom = res.parse();
-								resultFW = Files.newBufferedWriter(Paths.get(resultFilePath), StandardCharsets.UTF_8, new OpenOption[] {StandardOpenOption.APPEND});
+							Document dom = res.parse();
 
-								List<ViadeoPerson> personList = getPersonList(dom);
+							List<ViadeoPerson> personList = getPersonList(dom, keyWords);
 
-								int nbScrapedPerson = 0;
-								for (ViadeoPerson person : personList) {
-									String peopleCsvLine = StringUtil.join(Arrays.asList(new String[]{keyWords, person.getCountry(), person.getCity(), person.getName(), person.getJob(), person.getCompany(), person.getPreviousJob(), person.getPreviousCompany(), person.getOverview(), person.getProfileLink()}), ";");
-									if(!resultContains(person.getName(), peopleCsvLine)){
-										getNameSet().add(person.getName());
-										resultFW.append(System.lineSeparator());
-										resultFW.append(peopleCsvLine);
-										logger.debug("scrapping datas for " + person);
-										nbScrapedPerson ++;
-									}
-								}
-								PositionAvancement avancement = getAvancementMap().get(keyWords);
-								if(avancement == null){
-									System.out.println(keyWords + "  " + searchUrlConWra);
-								}
-								avancement.setScrapedPeopleNumber(avancement.getScrapedPeopleNumber() + nbScrapedPerson);
-								int progress = Math.round(((float)avancement.getScrapedPeopleNumber() / (float)avancement.getResultNumber()) * 100);
-								fireScrapingProgressUpdated(progress);
-
-								resultFW.close();
-								if(urlConWra != searchUrlConWra){
-									urlConWra.setScrapped(true);
-								}
-
-								Elements buttonNext = dom.select("p[class=numerotation] > a[class=nextPage]");
-
-								String href = buttonNext.attr("abs:href");
-								if(href != null && !"".equals(href)){
-									urlConWra = new UrlConnectionWrapper();
-									urlConWra.setUrl(href);
-									urlConWra.setTimeout(getRequestTimeout());
-									urlConWra.setUserAgent(getUserAgent());
-									urlConWra.setReferer(getViadeoUrl());
-
-									getHistory().addSearchConnection(urlConWra);
-
-									getScrappingHistoryXml().saveHistory(getHistory());
-								}else{
-									urlConWra = null;
-									searchUrlConWra.setScrapped(true);
+							int nbScrapedPerson = 0;
+							for (ViadeoPerson person : personList) {
+								if(!resultFileContains(person)){
+									getNameSet().add(person.getName());
+									getcSVWriterResult().writeLine(person);
+									logger.debug("scrapping datas for " + person);
+									nbScrapedPerson ++;
 								}
 							}
-						}while(urlConWra != null);
-					}
+							PositionAvancement avancement = getAvancementMap().get(keyWords);
+							avancement.setScrapedPeopleNumber(avancement.getScrapedPeopleNumber() + nbScrapedPerson);
+							
+							
+							float progress = ((float)avancement.getScrapedPeopleNumber() / (float)avancement.getResultNumber());
+							float keywordsParticipation = progress / (float) getAvancementMap().size();
+							float otherKeywordsParticipation = (float)avancement.getIndexKeywords() / (float)getAvancementMap().size();
+							float globalProgress = keywordsParticipation + otherKeywordsParticipation;
+							int progressPercent = Math.round(globalProgress * 100);
+							fireScrapingProgressUpdated(progressPercent);
+
+							if(urlConWra != searchUrlConWra){
+								urlConWra.setScrapped(true);
+							}
+
+							Elements buttonNext = dom.select("p[class=numerotation] > a[class=nextPage]");
+
+							String href = buttonNext.attr("abs:href");
+							if(href != null && !"".equals(href)){
+								urlConWra = new UrlConnectionWrapper();
+								urlConWra.setUrl(href);
+								urlConWra.setTimeout(getRequestTimeout());
+								urlConWra.setUserAgent(getUserAgent());
+								urlConWra.setReferer(getViadeoUrl());
+
+								getHistory().addSearchConnection(urlConWra);
+
+								getScrappingHistoryXml().saveHistory(getHistory());
+							}else{
+								urlConWra = null;
+								searchUrlConWra.setScrapped(true);
+							}
+						}
+					}while(urlConWra != null);
 				}
-			}catch(Exception ex){
-				throw ex;
-			}finally{
-				if(resultFW != null)resultFW.close();
 			}
 		}
 	}
@@ -593,22 +567,19 @@ public class ViadeoScraper {
 		return getScrappingSettings().getHttpCallsDelay();
 	}
 
-	private boolean resultContains(String name, String line) throws IOException, ScrapperException {
-		boolean result = getNameSet().contains(name);
-		if(result){
-			Path path = Paths.get(getResultFilePath());
-			List<String> lineList = Files.readAllLines(path, StandardCharsets.UTF_8);
-
-			result = lineList.contains(line);
+	private boolean resultFileContains(ViadeoPerson person) throws IOException, ScraperException {
+		boolean result = false;
+		if(person != null && person.getName() != null){
+			getNameSet().contains(person.getName());
+			if(result){
+				List<ViadeoPerson> personList = getcSVWriterResult().read();
+				result = personList != null && personList.contains(person);
+			}
 		}
 		return result;
 	}
 
-	private String getResultFilePath() throws IOException, ScrapperException {
-		return getSystemFilesFactory().getResultFilePath();
-	}
-
-	private List<ViadeoPerson> getPersonList(Document dom) {
+	private List<ViadeoPerson> getPersonList(Document dom, String keyWords) {
 		List<ViadeoPerson> result = null;
 		if(dom != null){
 			result = new ArrayList<ViadeoPerson>();
@@ -618,6 +589,7 @@ public class ViadeoScraper {
 				Element divPersonne = (Element) iterator.next();
 
 				ViadeoPerson person = new ViadeoPerson();
+				person.setKeywords(keyWords);
 				person.setCountry(getCleanCSVString(divPersonne.select("p[class=address ptxs pbs mbn] > a[class=country]").text()));
 				person.setCity(getCleanCSVString(divPersonne.select("p[class=address ptxs pbs mbn] > a[class=city]").text()));
 				person.setName(getCleanCSVString(divPersonne.select("h1[class=name mbn] > a[class=profile-link]").text()));
@@ -639,16 +611,12 @@ public class ViadeoScraper {
 		return result;
 	}
 
-	private HashSet<String> getNameSet() throws IOException, ScrapperException {
+	private HashSet<String> getNameSet() throws IOException, ScraperException {
 		if(nameSet == null){
 			nameSet = new HashSet<String>();
-			List<String> lineList = Files.readAllLines(Paths.get(getResultFilePath()), StandardCharsets.UTF_8);
-			for (String line : lineList) {
-				String[] valueList = line.split(";");
-				if(valueList.length > 2){
-					String nom = valueList[2];
-					nameSet.add(nom);	
-				}
+			List<ViadeoPerson> personList = getcSVWriterResult().read();
+			for (ViadeoPerson person : personList) {
+				nameSet.add(person.getName());
 			}
 		}
 		return nameSet;
@@ -673,26 +641,37 @@ public class ViadeoScraper {
 	}
 
 	public class PositionAvancement{
-		public PositionAvancement(int resultNumber, int scrapedPeopleNumber) {
+		public PositionAvancement(int resultNumber, int scrapedPeopleNumber, int indexKeywords) {
 			super();
+			this.indexKeywords = indexKeywords;
 			this.resultNumber = resultNumber;
 			this.scrapedPeopleNumber = scrapedPeopleNumber;
 		}
 		private int resultNumber;
 		private int scrapedPeopleNumber;
-
+		private int indexKeywords;
+		
 		public int getResultNumber() {
 			return resultNumber;
 		}
 		public void setResultNumber(int resultNumber) {
 			this.resultNumber = resultNumber;
 		}
+		
 		public int getScrapedPeopleNumber() {
 			return scrapedPeopleNumber;
 		}
 		public void setScrapedPeopleNumber(int scrapedPeopleNumber) {
 			this.scrapedPeopleNumber = scrapedPeopleNumber;
 		}
+		
+		public int getIndexKeywords() {
+			return indexKeywords;
+		}
+		public void setIndexKeywords(int indexKeywords) {
+			this.indexKeywords = indexKeywords;
+		}
+		
 	}
 
 	public void setInteruptFlag(boolean interruptFlag) {
@@ -709,6 +688,18 @@ public class ViadeoScraper {
 
 	public String getKeyWordFilePath() {
 		return getScrappingSettings() != null ? getScrappingSettings().getKeyWordListFilePath() : null;
+	}
+	
+	private void fireScrapingProgressUpdated(int progress){
+		for (ScrapingProgressListener scrapingProgressListener : scrapingProgressListenerList) {
+			scrapingProgressListener.progressUpdated(progress);
+		}
+	}
+
+	private void fireScrapingKeyWordsStarted(String keyWords) {
+		for (ScrapingProgressListener scrapingProgressListener : scrapingProgressListenerList) {
+			scrapingProgressListener.fireScrapingKeyWordsStarted(keyWords);
+		}
 	}
 	
 	public static void main(String[] args) {
