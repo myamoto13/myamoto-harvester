@@ -30,7 +30,7 @@ import org.xml.sax.SAXException;
 
 import com.extia.webscraper.data.ScrappingHistory;
 import com.extia.webscraper.data.UrlConnectionWrapper;
-import com.extia.webscraper.exception.ScrapperException;
+import com.extia.webscraper.exception.ScraperException;
 import com.extia.webscraper.system.ScraperSystemFilesFactory;
 import com.extia.webscraper.system.ScrappingSettings;
 
@@ -190,7 +190,7 @@ public class ScrappingHistoryXmlIO {
 		}
 	}
 	
-	private File getHistoryFile() throws ScrapperException{
+	private File getHistoryFile() throws ScraperException{
 		return new File(getSystemFilesFactory().getHistoryDir(), getHistoryFileName());
 	}
 	
@@ -198,7 +198,7 @@ public class ScrappingHistoryXmlIO {
 		return "History_" + getDateFormat().format(new Date())+".xml";
 	}
 	
-	public ScrappingHistory readScrappingHistory() throws ParserConfigurationException, SAXException, IOException, XPathExpressionException, ParseException, ScrapperException {
+	public ScrappingHistory readScrappingHistory() throws ParserConfigurationException, SAXException, IOException, XPathExpressionException, ParseException, ScraperException {
 		ScrappingHistory result = null;
 		File historyFile = getHistoryFile();
 		if(historyFile.exists()){
@@ -214,7 +214,7 @@ public class ScrappingHistoryXmlIO {
 		return result;
 	}
 	
-	public boolean saveHistory(ScrappingHistory scrappingHistory) throws TransformerException, ParserConfigurationException, ScrapperException{
+	public boolean saveHistory(ScrappingHistory scrappingHistory) throws TransformerException, ParserConfigurationException, ScraperException{
 		boolean result = false;
 		Document document = getXmlDocument(scrappingHistory);
 		File historyFile = getHistoryFile();

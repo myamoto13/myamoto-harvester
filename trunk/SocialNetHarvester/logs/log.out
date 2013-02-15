@@ -1,0 +1,121 @@
+0    [SwingWorker-pool-1-thread-1] INFO  com.extia.webscraper.scraper.ViadeoScraper  - logging in...
+6943 [SwingWorker-pool-1-thread-1] INFO  com.extia.webscraper.scraper.ViadeoScraper  - logged.
+6943 [SwingWorker-pool-1-thread-1] INFO  com.extia.webscraper.scraper.ViadeoScraper  - searching urls for keywords 'Zardoya Otis'
+6943 [SwingWorker-pool-1-thread-1] INFO  com.extia.webscraper.scraper.ViadeoScraper  - loading history..
+36917 [SwingWorker-pool-1-thread-1] INFO  com.extia.webscraper.scraper.ViadeoScraper  - history loaded.
+39539 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - found 11 results.
+41381 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - 11 results out of 11 will be retrieved For keywords : 'Zardoya Otis'
+41616 [SwingWorker-pool-1-thread-1] INFO  com.extia.webscraper.scraper.ViadeoScraper  - searching urls for keywords 'Playtech Ltd.'
+43238 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - found 6 results.
+44799 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - 6 results out of 6 will be retrieved For keywords : 'Playtech Ltd.'
+44863 [SwingWorker-pool-1-thread-1] INFO  com.extia.webscraper.scraper.ViadeoScraper  - searching urls for keywords 'Java J2EE'
+46625 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - found 12590 results.
+46625 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - divFacetList : 7
+46625 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - Thème retenu pour 12590 : Région
+48296 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - found 4579 results.
+48296 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - divFacetList : 6
+48296 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - Thème retenu pour 4579 : Ville
+49997 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - found 2223 results.
+49997 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - divFacetList : 5
+49997 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - Thème retenu pour 2223 : null
+51620 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - found 76 results.
+54975 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - found 48 results.
+56739 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - found 78 results.
+58394 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - found 37 results.
+60048 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - found 65 results.
+61703 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - found 42 results.
+63264 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - found 792 results.
+64856 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - found 597 results.
+66464 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - found 568 results.
+68025 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - found 537 results.
+69648 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - found 458 results.
+71256 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - 4298 results out of 12591 will be retrieved For keywords : 'Java J2EE'
+71386 [SwingWorker-pool-1-thread-1] INFO  com.extia.webscraper.scraper.ViadeoScraper  - searching urls for keywords 'PHP'
+73289 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - found 57444 results.
+73289 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - divFacetList : 7
+73289 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - Thème retenu pour 57444 : Région
+74928 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - found 17410 results.
+74928 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - divFacetList : 6
+74928 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - Thème retenu pour 17410 : Ville
+76661 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - found 8050 results.
+76661 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - divFacetList : 5
+76661 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - Thème retenu pour 8050 : null
+78175 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - found 197 results.
+80017 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - found 155 results.
+81625 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - found 138 results.
+83154 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - found 175 results.
+84731 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - found 110 results.
+86370 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - found 254 results.
+87962 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - found 4541 results.
+87962 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - divFacetList : 6
+87962 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - Thème retenu pour 4541 : Ville
+89554 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - found 1905 results.
+89554 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - divFacetList : 5
+89554 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - Thème retenu pour 1905 : null
+91193 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - found 584 results.
+92786 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - found 210 results.
+94315 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - found 198 results.
+95877 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - found 79 results.
+97640 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - found 79 results.
+99248 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - found 242 results.
+100965 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - found 3003 results.
+100965 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - divFacetList : 6
+100965 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - Thème retenu pour 3003 : Ville
+102573 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - found 779 results.
+104134 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - found 368 results.
+105664 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - found 390 results.
+107287 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - found 390 results.
+108786 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - found 97 results.
+110784 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - found 96 results.
+112376 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - found 69 results.
+114030 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - found 2746 results.
+114030 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - divFacetList : 6
+114030 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - Thème retenu pour 2746 : Ville
+115716 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - found 1147 results.
+115716 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - divFacetList : 5
+115716 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - Thème retenu pour 1147 : null
+117246 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - found 125 results.
+118854 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - found 87 results.
+120493 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - found 78 results.
+122023 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - found 60 results.
+123818 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - found 47 results.
+125410 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - found 41 results.
+127361 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - found 2222 results.
+127361 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - divFacetList : 6
+127361 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - Thème retenu pour 2222 : Ville
+129062 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - found 1125 results.
+129062 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - divFacetList : 5
+129062 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - Thème retenu pour 1125 : null
+130670 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - found 250 results.
+132231 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - found 118 results.
+133808 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - found 70 results.
+135759 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - found 28 results.
+137273 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - found 20 results.
+138881 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - found 17 results.
+140426 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - found 2009 results.
+140426 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - divFacetList : 6
+140426 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - Thème retenu pour 2009 : Ville
+142065 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - found 1423 results.
+142065 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - divFacetList : 5
+142065 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - Thème retenu pour 1423 : null
+143704 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - found 30 results.
+145390 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - found 28 results.
+147185 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - found 26 results.
+148746 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - found 25 results.
+150447 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - found 22 results.
+151977 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - found 18 results.
+155238 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - 10700 results out of 57444 will be retrieved For keywords : 'PHP'
+155302 [SwingWorker-pool-1-thread-1] INFO  com.extia.webscraper.scraper.ViadeoScraper  - searching urls for keywords 'tomtom'
+157611 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - found 436 results.
+159374 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - 436 results out of 436 will be retrieved For keywords : 'tomtom'
+159434 [SwingWorker-pool-1-thread-1] INFO  com.extia.webscraper.scraper.ViadeoScraper  - scrapping datas for keywords 'Zardoya Otis'
+161634 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - scrapping datas for Rodrigo Cantero Yubero
+161634 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - scrapping datas for Alberto S.
+161634 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - scrapping datas for Claudio Alonso
+161634 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - scrapping datas for Andrés Mármol
+161634 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - scrapping datas for Jonathan Alexis Betancur
+161634 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - scrapping datas for MIGUEL VIVANCOS FUSTER
+161634 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - scrapping datas for Marcos Lch
+161634 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - scrapping datas for Juan Alvarez Iñiguez
+161634 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - scrapping datas for Julia Caricol Montero
+161634 [SwingWorker-pool-1-thread-1] DEBUG com.extia.webscraper.scraper.ViadeoScraper  - scrapping datas for Manuel Theron Moraleda

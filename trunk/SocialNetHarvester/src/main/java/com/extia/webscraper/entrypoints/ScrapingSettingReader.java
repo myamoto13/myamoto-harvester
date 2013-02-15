@@ -6,7 +6,7 @@ import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
-import com.extia.webscraper.exception.ScrapperException;
+import com.extia.webscraper.exception.ScraperException;
 import com.extia.webscraper.system.ScrappingSettings;
 
 public class ScrapingSettingReader {
@@ -21,7 +21,7 @@ public class ScrapingSettingReader {
 		this.configFilePath = configFilePath;
 	}
 
-	public ScrappingSettings readScrappingSettings() throws ScrapperException {
+	public ScrappingSettings readScrappingSettings() throws ScraperException {
 		ScrappingSettings result = null;
 		String configFilePath = getConfigFilePath();
 		if(configFilePath != null){
@@ -99,12 +99,12 @@ public class ScrapingSettingReader {
 	        }
 			
 		}else{
-			throw new ScrapperException("Scraping config file path must be specified in the first argument.");
+			throw new ScraperException("Scraping config file path must be specified in the first argument.");
 		}
 		return result;
 	}
 	
-	private void writeScrappingSettings() throws ScrapperException {
+	private void writeScrappingSettings() throws ScraperException {
 		
 	}
 }

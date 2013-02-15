@@ -1,8 +1,14 @@
 package com.extia.webscraper.entrypoints;
+import java.io.IOException;
+
 import org.apache.log4j.Logger;
 
-import com.extia.webscraper.exception.ScrapperException;
+import com.extia.webscraper.exception.ScraperException;
+import com.extia.webscraper.io.FileIO;
 import com.extia.webscraper.io.ScrappingHistoryXmlIO;
+import com.extia.webscraper.io.csv.CSVFileIO;
+import com.extia.webscraper.io.csv.CSVKeywordReportIO;
+import com.extia.webscraper.io.csv.CSVPersonListIO;
 import com.extia.webscraper.scraper.ViadeoScraper;
 import com.extia.webscraper.system.ScraperSystemFilesFactory;
 import com.extia.webscraper.system.ScrappingSettings;
@@ -21,7 +27,7 @@ public class ViadeoScrapperLauncher {
 
 	}
 
-	public ViadeoScraper initViadeoScraper(String configFilePath) throws ScrapperException{
+	public ViadeoScraper initViadeoScraper(String configFilePath) throws ScraperException, IOException{
 
 		ScrappingHistoryXmlIO scrappingHistoryXlml = new ScrappingHistoryXmlIO();
 		
@@ -31,19 +37,38 @@ public class ViadeoScrapperLauncher {
 
 		if(scrappingSettings.getViadeoLogin() == null || "".equals(scrappingSettings.getViadeoLogin()) 
 				|| scrappingSettings.getViadeoPassword() == null || "".equals(scrappingSettings.getViadeoPassword()) ){
-			throw new ScrapperException("You must provide valid viadeoLogin and viadeoPassword.");
+			throw new ScraperException("You must provide valid viadeoLogin and viadeoPassword.");
 		}
 		ScraperSystemFilesFactory systemFilesFactory = new ScraperSystemFilesFactory();
 		systemFilesFactory.setScrappingSettings(scrappingSettings);
 
 		scrappingHistoryXlml.setSystemFilesFactory(systemFilesFactory);
 
+		CSVFileIO cSVFileWriterKeywordReport = new CSVFileIO();
+		cSVFileWriterKeywordReport.setFile(systemFilesFactory.getKeyWordsReportFile());
+		
+		CSVKeywordReportIO cSVWriterKeywordReport = new CSVKeywordReportIO();
+		cSVWriterKeywordReport.setcSVFileWriter(cSVFileWriterKeywordReport);
+		
+		
+		
+		CSVFileIO cSVFileWriterResult = new CSVFileIO();
+		cSVFileWriterResult.setFile(systemFilesFactory.getResultFile());
+		
+		CSVPersonListIO cSVWriterViadeoPersonList = new CSVPersonListIO();
+		cSVWriterViadeoPersonList.setcSVFileWriter(cSVFileWriterResult);
+		
+		FileIO keywordListFileIO = new FileIO();
+		keywordListFileIO.setFilePath(scrappingSettings.getKeyWordListFilePath());
+		
 		ViadeoScraper result = new ViadeoScraper();
 		result.setSystemFilesFactory(systemFilesFactory);
 		result.setScrappingSettings(scrappingSettings);
 		result.setViadeoProperties(new ViadeoProperties());
 		result.setScrappingHistoryXml(scrappingHistoryXlml);
-
+		result.setcSVWriterKeywordReport(cSVWriterKeywordReport);
+		result.setcSVWriterResult(cSVWriterViadeoPersonList);
+		result.setKeywordListFileIO(keywordListFileIO);
 		return result;
 	}
 
