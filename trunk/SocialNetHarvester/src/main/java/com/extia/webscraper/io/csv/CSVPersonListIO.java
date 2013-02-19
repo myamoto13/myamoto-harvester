@@ -1,6 +1,7 @@
 package com.extia.webscraper.io.csv;
 
 import java.io.IOException;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -21,12 +22,12 @@ public class CSVPersonListIO {
 
 	public void writeLine(ViadeoPerson person) throws IOException{
 		if(person != null){
-			getcSVFileWriter().write(Arrays.asList(new String[]{person.getKeywords(), person.getCountry(), person.getCity(), person.getName(), person.getJob(), person.getCompany(), person.getPreviousJob(), person.getPreviousCompany(), person.getOverview(), person.getProfileLink()}));
+			getcSVFileWriter().write(Arrays.asList(new String[]{person.getKeywords(), person.getCountry(), person.getCity(), person.getName(), person.getJob(), person.getCompany(), person.getPreviousJob(), person.getPreviousCompany(), person.getOverview(), person.getProfileLink()}), StandardOpenOption.APPEND);
 		}
 	}
 
 	public void writeTitle() throws IOException{
-		getcSVFileWriter().write(Arrays.asList(new String[]{"keywords", "country", "city", "name", "job", "company", "previousJob", "previousCompany", "overview", "profileLink"}));
+		getcSVFileWriter().write(Arrays.asList(new String[]{"keywords", "country", "city", "name", "job", "company", "previousJob", "previousCompany", "overview", "profileLink"}), StandardOpenOption.WRITE);
 	}
 
 	public List<ViadeoPerson> read() throws IOException{

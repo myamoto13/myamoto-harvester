@@ -30,11 +30,11 @@ public class CSVFileIO {
 		this.file = file;
 	}
 	
-	public void write(List<String> stringList) throws IOException{
+	public void write(List<String> stringList, StandardOpenOption openOption) throws IOException{
 		if(stringList != null){
 			BufferedWriter keyWordReportFW = null;
 			try{
-				keyWordReportFW = Files.newBufferedWriter(Paths.get(file.getAbsolutePath()), StandardCharsets.UTF_8, new OpenOption[] {StandardOpenOption.WRITE});
+				keyWordReportFW = Files.newBufferedWriter(Paths.get(file.getAbsolutePath()), StandardCharsets.UTF_8, new OpenOption[] {openOption});
 				keyWordReportFW.append(StringUtil.join(stringList, separationCharacter));
 				keyWordReportFW.append(System.lineSeparator());
 				keyWordReportFW.close();
