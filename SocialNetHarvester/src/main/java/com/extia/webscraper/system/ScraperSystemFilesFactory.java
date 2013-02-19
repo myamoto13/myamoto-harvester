@@ -69,17 +69,15 @@ public class ScraperSystemFilesFactory {
 			}else{
 				result = new File(filePath);
 
-				if(!result.exists()){
-					result.createNewFile();
-				}else{
+				if(result.exists()){
 					int indexResultFile = 1;
 					File backUpFile = new File(backupDir, "backup_" + result.getName());
 					while(backUpFile.exists()){
 						backUpFile = new File(backupDir, "backup_" + indexResultFile++ + result.getName());
 					}
-					backUpFile.createNewFile();
-					Files.copy(Paths.get(result.getAbsolutePath()), new FileOutputStream(backUpFile));
+					Files.move(Paths.get(result.getAbsolutePath()), Paths.get(backUpFile.getAbsolutePath()));
 				}
+				result.createNewFile();
 
 			}
 		}

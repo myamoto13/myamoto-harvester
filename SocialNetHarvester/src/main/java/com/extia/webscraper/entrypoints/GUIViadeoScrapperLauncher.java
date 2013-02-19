@@ -76,7 +76,7 @@ public class GUIViadeoScrapperLauncher {
 			GUIViadeoScrapperLauncher launcher = new GUIViadeoScrapperLauncher();
 			launcher.launch(configFilePath);
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error(e.getMessage(), e);
 		}
 	}
 	
