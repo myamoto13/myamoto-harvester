@@ -62,7 +62,7 @@ class ScrapTask extends SwingWorker<Void, Void> {
     
     protected void fireScrapingKeyWordsStarted(String keyWords) {
     	for (ScrapTaskListener scrapTaskListener : scrapTaskListenerList) {
-			scrapTaskListener.fireScrapingKeyWordsStarted(keyWords);
+			scrapTaskListener.scrapingKeyWordsStarted(keyWords);
 		}		
 	}
 
@@ -73,19 +73,19 @@ class ScrapTask extends SwingWorker<Void, Void> {
     
 	private void fireSearchError(Exception ex) {
 		for (ScrapTaskListener scrapTaskListener : scrapTaskListenerList) {
-			scrapTaskListener.fireSearchError(ex);
+			scrapTaskListener.searchError(ex);
 		}		
 	}
 	
 	private void fireSearchFinished() {
 		for (ScrapTaskListener scrapTaskListener : scrapTaskListenerList) {
-			scrapTaskListener.fireSearchFinished();
+			scrapTaskListener.searchFinished();
 		}		
 	}
 
 	private void fireSearchStarting() {
 		for (ScrapTaskListener scrapTaskListener : scrapTaskListenerList) {
-			scrapTaskListener.fireSearchStarting();
+			scrapTaskListener.searchStarted();
 		}		
 	}
 	
@@ -94,10 +94,10 @@ class ScrapTask extends SwingWorker<Void, Void> {
     }
 	
 	interface ScrapTaskListener{
-		public void fireSearchError(Exception ex);
-		public void fireScrapingKeyWordsStarted(String keyWords);
-		public void fireSearchFinished();
-		public void fireSearchStarting();
+		public void searchError(Exception ex);
+		public void scrapingKeyWordsStarted(String keyWords);
+		public void searchFinished();
+		public void searchStarted();
 	}
 
 	

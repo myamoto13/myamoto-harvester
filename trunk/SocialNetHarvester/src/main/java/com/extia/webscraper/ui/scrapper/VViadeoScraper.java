@@ -22,7 +22,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 import com.extia.webscraper.ui.common.HyperlinkBuilder;
-import com.extia.webscraper.ui.scrapper.MViadeoScraper.MViadeoScraperListener;
 
 public class VViadeoScraper implements MViadeoScraperListener {
 	
@@ -87,11 +86,10 @@ public class VViadeoScraper implements MViadeoScraperListener {
 						String keywords = keywordsTxtFld.getText();
 						if(keywords != null && !"".equals(keywords)){
 							fireScrapingLaunched(keywords);
-
 						} 
 					}catch(Exception ex){
 						ex.printStackTrace();
-						fireErrorMsg(ex);
+						error(ex);
 					}
 				}
 
@@ -104,7 +102,7 @@ public class VViadeoScraper implements MViadeoScraperListener {
 					try{
 						fireScrapingStopped();
 					}catch(Exception ex){
-						fireErrorMsg(ex);
+						error(ex);
 					}
 				}
 			});
@@ -115,7 +113,7 @@ public class VViadeoScraper implements MViadeoScraperListener {
 					try{
 						fillUI(PageScraper.KEYWORDLIST_SEARCH);
 					}catch(Exception ex){
-						fireErrorMsg(ex);
+						error(ex);
 					}
 				}
 			});
@@ -128,7 +126,7 @@ public class VViadeoScraper implements MViadeoScraperListener {
 //						fireEnterSettings();
 						//TODO
 					}catch(Exception ex){
-						fireErrorMsg(ex);
+						error(ex);
 					}
 				}
 
@@ -186,7 +184,7 @@ public class VViadeoScraper implements MViadeoScraperListener {
 						fireScrapingFromFileLaunched();
 					}catch(Exception ex){
 						ex.printStackTrace();
-						fireErrorMsg(ex);
+						error(ex);
 					}
 				}
 
@@ -199,7 +197,7 @@ public class VViadeoScraper implements MViadeoScraperListener {
 					try{
 						fireScrapingStopped();
 					}catch(Exception ex){
-						fireErrorMsg(ex);
+						error(ex);
 					}
 				}
 
@@ -211,7 +209,7 @@ public class VViadeoScraper implements MViadeoScraperListener {
 					try{
 						fillUI(PageScraper.KEYWORDS_SEARCH);
 					}catch(Exception ex){
-						fireErrorMsg(ex);
+						error(ex);
 					}
 				}
 			});
@@ -224,7 +222,7 @@ public class VViadeoScraper implements MViadeoScraperListener {
 //						fireEnterSettings();
 						//TODO
 					}catch(Exception ex){
-						fireErrorMsg(ex);
+						error(ex);
 					}
 				}
 
@@ -331,44 +329,37 @@ public class VViadeoScraper implements MViadeoScraperListener {
 		}		
 	}
 	
-	interface VViadeoScraperListener{
-		public void fireSearchLaunched(String keywords);
-		public void fireScrapingFromFileLaunched() throws IOException;
-		public void fireEnterSettings() throws Exception;
-		public void fireScrapingStopped();
-	}
-
 	private JFrame getParentFrame() {
 		Component p = ui;
 		while ( (p = p.getParent()) != null && !(p instanceof JFrame));
 		return((JFrame)p);
 	}
 
-	public void fireEnableSearchList(boolean enabled) {
+	public void searchEnabledList(boolean enabled) {
 		pnlSearchList.setVisible(enabled);
 		pnlProgressList.setVisible(!enabled);
 		getParentFrame().setCursor(enabled ? null : Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 	}
 	
-	public void fireEnableSearch(boolean enabled) {
+	public void searchEnabled(boolean enabled) {
 		pnlSearch.setVisible(enabled);
 		pnlProgress.setVisible(!enabled);
 		getParentFrame().setCursor(enabled ? null : Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 	}
 
-	public void fireShowSettings() throws Exception {
+	public void showSettings() throws Exception {
 		fillUI(PageScraper.SETTINGS);
 	}
 	
-	public void updateScrapListProgress(int progress) {
+	public void progressUpdatedList(int progress) {
 		progressBarList.setValue(progress);
 	}
 
-	public void fireUpdateScrapProgress(int progress) {
+	public void progressUpdated(int progress) {
 		progressBar.setValue(progress);
 	}
 
-	public void fireErrorMsg(Exception ex) {
+	public void error(Exception ex) {
 		//TODO : log somewhere..
 		ex.printStackTrace();
 	}
@@ -381,9 +372,8 @@ public class VViadeoScraper implements MViadeoScraperListener {
 		return uiSettings;
 	}
 
-	public void fireHighlightKeywords(String keyWords) {
+	public void highlightKeyword(String keyWords) {
 		keyWordJList.setSelectedValue(keyWords, true);
 	}
-
 
 }
