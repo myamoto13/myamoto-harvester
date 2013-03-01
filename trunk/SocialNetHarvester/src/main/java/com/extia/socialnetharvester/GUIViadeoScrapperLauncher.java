@@ -15,8 +15,8 @@ import javax.swing.UIManager;
 
 import org.apache.log4j.Logger;
 
-import com.extia.socialnetharvester.http.viadeo.ViadeoUserSettingsReader;
 import com.extia.socialnetharvester.http.viadeo.ViadeoScraper;
+import com.extia.socialnetharvester.io.ViadeoUserSettingsReader;
 import com.extia.socialnetharvester.ui.scrapper.GUIViadeoScrapper;
 import com.extia.socialnetharvester.ui.setting.GUIViadeoScrappingSettings;
 
