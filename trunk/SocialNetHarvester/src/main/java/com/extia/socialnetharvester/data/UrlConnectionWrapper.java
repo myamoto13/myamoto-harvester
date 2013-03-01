@@ -1,4 +1,4 @@
-package com.extia.socialnetharvester.pojos;
+package com.extia.socialnetharvester.data;
 
 import java.util.HashMap;
 import java.util.Map;

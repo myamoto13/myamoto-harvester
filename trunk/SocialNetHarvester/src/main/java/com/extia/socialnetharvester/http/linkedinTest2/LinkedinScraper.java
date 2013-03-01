@@ -35,12 +35,12 @@ import org.scribe.model.Verifier;
 import org.scribe.oauth.OAuthService;
 
 import com.extia.socialnetharvester.ScraperException;
+import com.extia.socialnetharvester.data.ScrappingHistory;
+import com.extia.socialnetharvester.data.UrlConnectionWrapper;
 import com.extia.socialnetharvester.http.viadeo.ScraperSystemFilesFactory;
 import com.extia.socialnetharvester.http.viadeo.ViadeoUserSettings;
 import com.extia.socialnetharvester.http.viadeo.ViadeoProperties;
 import com.extia.socialnetharvester.io.ScrappingHistoryXmlIO;
-import com.extia.socialnetharvester.pojos.ScrappingHistory;
-import com.extia.socialnetharvester.pojos.UrlConnectionWrapper;
 
 /**
  * @author hp

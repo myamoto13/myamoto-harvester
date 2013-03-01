@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.extia.socialnetharvester.pojos.ViadeoPerson;
+import com.extia.socialnetharvester.data.ViadeoPerson;
 
 public class CSVPersonListIO {
 

@@ -1,4 +1,4 @@
-package com.extia.socialnetharvester.pojos;
+package com.extia.socialnetharvester.data;
 
 
 public class ViadeoPerson {
