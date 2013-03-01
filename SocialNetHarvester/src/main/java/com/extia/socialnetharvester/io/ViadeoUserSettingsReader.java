@@ -1,4 +1,4 @@
-package com.extia.socialnetharvester.http.viadeo;
+package com.extia.socialnetharvester.io;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 
 import com.extia.socialnetharvester.GUIViadeoScrapperLauncher;
 import com.extia.socialnetharvester.ScraperException;
+import com.extia.socialnetharvester.http.viadeo.ViadeoUserSettings;
 
 public class ViadeoUserSettingsReader {
 	

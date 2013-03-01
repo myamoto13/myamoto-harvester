@@ -4,12 +4,12 @@ import java.io.IOException;
 import org.apache.log4j.Logger;
 
 import com.extia.socialnetharvester.http.viadeo.ScraperSystemFilesFactory;
-import com.extia.socialnetharvester.http.viadeo.ViadeoUserSettingsReader;
 import com.extia.socialnetharvester.http.viadeo.ViadeoUserSettings;
 import com.extia.socialnetharvester.http.viadeo.ViadeoProperties;
 import com.extia.socialnetharvester.http.viadeo.ViadeoScraper;
 import com.extia.socialnetharvester.io.FileIO;
 import com.extia.socialnetharvester.io.ScrappingHistoryXmlIO;
+import com.extia.socialnetharvester.io.ViadeoUserSettingsReader;
 import com.extia.socialnetharvester.io.csv.CSVFileIO;
 import com.extia.socialnetharvester.io.csv.CSVKeywordReportIO;
 import com.extia.socialnetharvester.io.csv.CSVPersonListIO;
