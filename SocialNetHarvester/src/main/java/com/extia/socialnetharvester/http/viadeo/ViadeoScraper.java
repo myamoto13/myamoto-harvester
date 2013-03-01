@@ -27,13 +27,13 @@ import org.jsoup.select.Elements;
 import org.xml.sax.SAXException;
 
 import com.extia.socialnetharvester.ScraperException;
+import com.extia.socialnetharvester.data.ScrappingHistory;
+import com.extia.socialnetharvester.data.UrlConnectionWrapper;
+import com.extia.socialnetharvester.data.ViadeoPerson;
 import com.extia.socialnetharvester.io.FileIO;
 import com.extia.socialnetharvester.io.ScrappingHistoryXmlIO;
 import com.extia.socialnetharvester.io.csv.CSVKeywordReportIO;
 import com.extia.socialnetharvester.io.csv.CSVPersonListIO;
-import com.extia.socialnetharvester.pojos.ScrappingHistory;
-import com.extia.socialnetharvester.pojos.UrlConnectionWrapper;
-import com.extia.socialnetharvester.pojos.ViadeoPerson;
 
 /**
  * @author hp

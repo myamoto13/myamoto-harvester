@@ -29,10 +29,10 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import com.extia.socialnetharvester.ScraperException;
+import com.extia.socialnetharvester.data.ScrappingHistory;
+import com.extia.socialnetharvester.data.UrlConnectionWrapper;
 import com.extia.socialnetharvester.http.viadeo.ScraperSystemFilesFactory;
 import com.extia.socialnetharvester.http.viadeo.ViadeoUserSettings;
-import com.extia.socialnetharvester.pojos.ScrappingHistory;
-import com.extia.socialnetharvester.pojos.UrlConnectionWrapper;
 
 public class ScrappingHistoryXmlIO {
 	
