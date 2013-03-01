@@ -634,46 +634,6 @@ public class ViadeoScraper {
 		return getScrappingSettings().getTimeout();
 	}
 
-	public interface ScrapingProgressListener{
-		public void progressUpdated(int progress);
-
-		public void fireScrapingKeyWordsStarted(String keyWords);
-	}
-
-	public class PositionAvancement{
-		public PositionAvancement(int resultNumber, int scrapedPeopleNumber, int indexKeywords) {
-			super();
-			this.indexKeywords = indexKeywords;
-			this.resultNumber = resultNumber;
-			this.scrapedPeopleNumber = scrapedPeopleNumber;
-		}
-		private int resultNumber;
-		private int scrapedPeopleNumber;
-		private int indexKeywords;
-		
-		public int getResultNumber() {
-			return resultNumber;
-		}
-		public void setResultNumber(int resultNumber) {
-			this.resultNumber = resultNumber;
-		}
-		
-		public int getScrapedPeopleNumber() {
-			return scrapedPeopleNumber;
-		}
-		public void setScrapedPeopleNumber(int scrapedPeopleNumber) {
-			this.scrapedPeopleNumber = scrapedPeopleNumber;
-		}
-		
-		public int getIndexKeywords() {
-			return indexKeywords;
-		}
-		public void setIndexKeywords(int indexKeywords) {
-			this.indexKeywords = indexKeywords;
-		}
-		
-	}
-
 	public void setInteruptFlag(boolean interruptFlag) {
 		this.interruptFlag = interruptFlag;
 	}
@@ -715,5 +675,45 @@ public class ViadeoScraper {
 		}
 		
 		System.out.println(result);
+	}
+	
+	public interface ScrapingProgressListener{
+		public void progressUpdated(int progress);
+
+		public void fireScrapingKeyWordsStarted(String keyWords);
+	}
+	
+	public class PositionAvancement{
+		public PositionAvancement(int resultNumber, int scrapedPeopleNumber, int indexKeywords) {
+			super();
+			this.indexKeywords = indexKeywords;
+			this.resultNumber = resultNumber;
+			this.scrapedPeopleNumber = scrapedPeopleNumber;
+		}
+		private int resultNumber;
+		private int scrapedPeopleNumber;
+		private int indexKeywords;
+		
+		public int getResultNumber() {
+			return resultNumber;
+		}
+		public void setResultNumber(int resultNumber) {
+			this.resultNumber = resultNumber;
+		}
+		
+		public int getScrapedPeopleNumber() {
+			return scrapedPeopleNumber;
+		}
+		public void setScrapedPeopleNumber(int scrapedPeopleNumber) {
+			this.scrapedPeopleNumber = scrapedPeopleNumber;
+		}
+		
+		public int getIndexKeywords() {
+			return indexKeywords;
+		}
+		public void setIndexKeywords(int indexKeywords) {
+			this.indexKeywords = indexKeywords;
+		}
+		
 	}
 }

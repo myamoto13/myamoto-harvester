@@ -9,7 +9,6 @@ import javax.swing.JPanel;
 
 import com.extia.webscraper.scraper.ViadeoScraper;
 import com.extia.webscraper.ui.scrapper.ScrapTask.ScrapTaskListener;
-import com.extia.webscraper.ui.scrapper.VViadeoScraper.VViadeoScraperListener;
 import com.extia.webscraper.ui.setting.GUIViadeoScrappingSettings;
 
 public class GUIViadeoScrapper implements VViadeoScraperListener {
@@ -97,19 +96,19 @@ public class GUIViadeoScrapper implements VViadeoScraperListener {
 		if(keywordsSearchTaskListener == null){
 			keywordsSearchTaskListener = new ScrapTaskListener() {
 
-				public void fireSearchStarting() {
+				public void searchStarted() {
 					getModele().enableSearch(false);				
 				}
 
-				public void fireSearchFinished() {
+				public void searchFinished() {
 					getModele().enableSearch(true);				
 				}
 
-				public void fireSearchError(Exception ex) {
+				public void searchError(Exception ex) {
 					getModele().errorMsg(ex);				
 				}
 
-				public void fireScrapingKeyWordsStarted(String keyWords) {
+				public void scrapingKeyWordsStarted(String keyWords) {
 				}
 			};
 		}
@@ -152,19 +151,19 @@ public class GUIViadeoScrapper implements VViadeoScraperListener {
 		if(keywordsListSearchTaskListener == null){
 			keywordsListSearchTaskListener = new ScrapTaskListener() {
 
-				public void fireSearchStarting() {
+				public void searchStarted() {
 					getModele().enableSearchList(false);				
 				}
 
-				public void fireSearchFinished() {
+				public void searchFinished() {
 					getModele().enableSearchList(true);				
 				}
 
-				public void fireSearchError(Exception ex) {
+				public void searchError(Exception ex) {
 					getModele().errorMsg(ex);
 				}
 
-				public void fireScrapingKeyWordsStarted(String keyWords) {
+				public void scrapingKeyWordsStarted(String keyWords) {
 					getModele().highlightKeywords(keyWords);
 				}
 

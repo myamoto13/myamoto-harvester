@@ -21,7 +21,7 @@ public class MViadeoScraper {
 	}
 
 	public MViadeoScraper() {
-		modeleListenerList = new ArrayList<MViadeoScraper.MViadeoScraperListener>();
+		modeleListenerList = new ArrayList<MViadeoScraperListener>();
 	}
 	
 	public void addModeleListener(MViadeoScraperListener modeleListener) {
@@ -36,56 +36,45 @@ public class MViadeoScraper {
 		return viadeoScraper != null ? viadeoScraper.getKeyWordFilePath() : null;
 	}
 	
-	
-	interface MViadeoScraperListener{
-		void fireUpdateScrapProgress(int progress);
-		void fireErrorMsg(Exception ex);
-		void fireEnableSearch(boolean enableb);
-		void fireShowSettings() throws Exception;
-		void updateScrapListProgress(int progress);
-		void fireEnableSearchList(boolean enabled);
-		void fireHighlightKeywords(String keyWords);
-	}
-
 	public void updateScrapProgress(int progress) {
 		for (MViadeoScraperListener modeleListener : modeleListenerList) {
-			modeleListener.fireUpdateScrapProgress(progress);
+			modeleListener.progressUpdated(progress);
 		}
 	}
 
 	public void errorMsg(Exception ex) {
 		for (MViadeoScraperListener modeleListener : modeleListenerList) {
-			modeleListener.fireErrorMsg(ex);
+			modeleListener.error(ex);
 		}
 	}
 
 	public void enableSearch(boolean enableb) {
 		for (MViadeoScraperListener modeleListener : modeleListenerList) {
-			modeleListener.fireEnableSearch(enableb);
+			modeleListener.searchEnabled(enableb);
 		}
 	}
 
 	public void showSettings() throws Exception {
 		for (MViadeoScraperListener modeleListener : modeleListenerList) {
-			modeleListener.fireShowSettings();
+			modeleListener.showSettings();
 		}
 	}
 
 	public void updateScrapListProgress(int progress) {
 		for (MViadeoScraperListener modeleListener : modeleListenerList) {
-			modeleListener.updateScrapListProgress(progress);
+			modeleListener.progressUpdatedList(progress);
 		}		
 	}
 
 	public void enableSearchList(boolean enabled) {
 		for (MViadeoScraperListener modeleListener : modeleListenerList) {
-			modeleListener.fireEnableSearchList(enabled);
+			modeleListener.searchEnabledList(enabled);
 		}		
 	}
 
 	public void highlightKeywords(String keyWords) {
 		for (MViadeoScraperListener modeleListener : modeleListenerList) {
-			modeleListener.fireHighlightKeywords(keyWords);
+			modeleListener.highlightKeyword(keyWords);
 		}
 	}
 
