@@ -78,7 +78,7 @@ public class VViadeoScraper implements MViadeoScraperListener {
 
 	private JPanel getUiSearch(){
 		if(uiSearch == null){
-			scrapButton = new JButton(new ImageIcon(getClass().getResource("website-scraper-icon-32.png")));
+			scrapButton = new JButton(new ImageIcon(getClass().getResource("/icones/website-scraper-icon-32.png")));
 			scrapButton.setToolTipText("perform scraping");
 			scrapButton.addActionListener(new AbstractAction() {
 				public void actionPerformed(ActionEvent e) {
@@ -95,7 +95,7 @@ public class VViadeoScraper implements MViadeoScraperListener {
 
 			});
 
-			stopButton = new JButton(new ImageIcon(getClass().getResource("stop_icon_32.png")));
+			stopButton = new JButton(new ImageIcon(getClass().getResource("/icones/stop_icon_32.png")));
 			stopButton.setToolTipText("stop scraping");
 			stopButton.addActionListener(new AbstractAction() {
 				public void actionPerformed(ActionEvent e) {
@@ -176,7 +176,7 @@ public class VViadeoScraper implements MViadeoScraperListener {
 	
 	private Component getUiSearchList() throws IOException {
 		if(uiSearchList == null){
-			scrapButtonList = new JButton(new ImageIcon(getClass().getResource("website-scraper-icon-32.png")));
+			scrapButtonList = new JButton(new ImageIcon(getClass().getResource("/icones/website-scraper-icon-32.png")));
 			scrapButtonList.setToolTipText("perform scraping");
 			scrapButtonList.addActionListener(new AbstractAction() {
 				public void actionPerformed(ActionEvent e) {
@@ -190,7 +190,7 @@ public class VViadeoScraper implements MViadeoScraperListener {
 
 			});
 
-			stopButtonList = new JButton(new ImageIcon(getClass().getResource("stop_icon_32.png")));
+			stopButtonList = new JButton(new ImageIcon(getClass().getResource("/icones/stop_icon_32.png")));
 			stopButtonList.setToolTipText("stop scraping");
 			stopButtonList.addActionListener(new AbstractAction() {
 				public void actionPerformed(ActionEvent e) {
