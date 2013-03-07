@@ -520,17 +520,22 @@ public class ViadeoScraper {
 									nbScrapedPerson ++;
 								}
 							}
+							
 							PositionAvancement avancement = getAvancementMap().get(keyWords);
 							avancement.setScrapedPeopleNumber(avancement.getScrapedPeopleNumber() + nbScrapedPerson);
 							
+							int nbScraped = 0;
+							int nbTotal = 0;
+							for (PositionAvancement avancementVar : getAvancementMap().values()) {
+								nbTotal += avancementVar.getResultNumber();
+								nbScraped += avancementVar.getScrapedPeopleNumber();
+							}
 							
-							float progress = ((float)avancement.getScrapedPeopleNumber() / (float)avancement.getResultNumber());
-							float keywordsParticipation = progress / (float) getAvancementMap().size();
-							float otherKeywordsParticipation = (float)avancement.getIndexKeywords() / (float)getAvancementMap().size();
-							float globalProgress = keywordsParticipation + otherKeywordsParticipation;
-							int progressPercent = Math.round(globalProgress * 100);
-							fireScrapingProgressUpdated(progressPercent);
+							float progress = (float)nbScraped / (float)nbTotal; 
+							int progressPercent = Math.round(progress * 100);
 
+							fireScrapingProgressUpdated(progressPercent);
+							
 							if(urlConWra != searchUrlConWra){
 								urlConWra.setScrapped(true);
 							}
@@ -657,21 +662,6 @@ public class ViadeoScraper {
 		for (ScrapingProgressListener scrapingProgressListener : scrapingProgressListenerList) {
 			scrapingProgressListener.fireScrapingKeyWordsStarted(keyWords);
 		}
-	}
-	
-	public static void main(String[] args) {
-		String url = "http://www.viadeo.com/v/search/members/?keywords=C%2B%2B&companyExactSearch=on&county=112&town=paris&ga_from=Tfrom:result-membres;Bfrom:facettes;Efrom:town";
-		String regEx = "(.*keywords=)([^\\&]*)(\\&.*)";
-		String result = url.replaceAll(regEx, "$2");
-		
-		try {
-			result = URLDecoder.decode(result, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		System.out.println(result);
 	}
 	
 	public interface ScrapingProgressListener{
