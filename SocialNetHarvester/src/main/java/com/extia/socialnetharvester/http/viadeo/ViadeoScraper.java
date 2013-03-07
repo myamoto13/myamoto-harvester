@@ -30,6 +30,7 @@ import com.extia.socialnetharvester.ScraperException;
 import com.extia.socialnetharvester.data.ScrappingHistory;
 import com.extia.socialnetharvester.data.UrlConnectionWrapper;
 import com.extia.socialnetharvester.data.ViadeoPerson;
+import com.extia.socialnetharvester.http.viadeo.avancement.AvancementManager;
 import com.extia.socialnetharvester.io.FileIO;
 import com.extia.socialnetharvester.io.ScrappingHistoryXmlIO;
 import com.extia.socialnetharvester.io.csv.CSVKeywordReportIO;
@@ -51,7 +52,6 @@ public class ViadeoScraper {
 	private HashSet<String> nameSet;
 	private List<ScrapingProgressListener> scrapingProgressListenerList;
 	private Map<UrlConnectionWrapper, Document> domBufferMap;
-	private Map<String, PositionAvancement> avancementMap;
 	private ScraperSystemFilesFactory systemFilesFactory;
 	
 	private FileIO keywordListFileIO;
@@ -60,6 +60,15 @@ public class ViadeoScraper {
 	private CSVPersonListIO cSVWriterResult;
 	
 	private boolean interruptFlag;
+	
+	private AvancementManager avancementManager;
+
+	public AvancementManager getAvancementManager() {
+		if(avancementManager == null){
+			avancementManager = new AvancementManager();
+		}
+		return avancementManager;
+	}
 
 	public ViadeoScraper() {
 		scrapingProgressListenerList = new ArrayList<ViadeoScraper.ScrapingProgressListener>();
@@ -113,13 +122,6 @@ public class ViadeoScraper {
 		return getViadeoProperties().getMaximumSearchResults();
 	}
 	
-	private Map<String, PositionAvancement> getAvancementMap(){
-		if(avancementMap == null){
-			avancementMap = new HashMap<String, PositionAvancement>();
-		}
-		return avancementMap;
-	}
-
 	private Map<UrlConnectionWrapper, Document> getDomBufferMap(){
 		if(domBufferMap == null){
 			domBufferMap = new HashMap<UrlConnectionWrapper, Document>();
@@ -239,7 +241,7 @@ public class ViadeoScraper {
 			Map<String, List<UrlConnectionWrapper>> urlsForKeywordsMap = new HashMap<String, List<UrlConnectionWrapper>>();
 			int indexKeywords = 0;
 			getDomBufferMap().clear();
-			getAvancementMap().clear();
+			getAvancementManager().clear();
 			for (String keyWords : keyWordList) {
 				fireScrapingProgressUpdated(0);
 
@@ -299,8 +301,8 @@ public class ViadeoScraper {
 							int nbResults = getInteger(h1NbElements.text());
 
 							logger.debug(nbResultsRetrieved + " results out of " + nbResults + " will be retrieved For keywords : '" + keyWords + "'");
-							getAvancementMap().put(keyWords, new PositionAvancement(nbResultsRetrieved, 0, indexKeywords));
-
+							getAvancementManager().add(keyWords, nbResultsRetrieved, 0);
+							
 							/*
 							 * TODO 
 							 * for each parent URL, add the last child URL for which scraping started.
@@ -521,20 +523,10 @@ public class ViadeoScraper {
 								}
 							}
 							
-							PositionAvancement avancement = getAvancementMap().get(keyWords);
-							avancement.setScrapedPeopleNumber(avancement.getScrapedPeopleNumber() + nbScrapedPerson);
 							
-							int nbScraped = 0;
-							int nbTotal = 0;
-							for (PositionAvancement avancementVar : getAvancementMap().values()) {
-								nbTotal += avancementVar.getResultNumber();
-								nbScraped += avancementVar.getScrapedPeopleNumber();
-							}
+							getAvancementManager().incrementScrappedNumber(keyWords, nbScrapedPerson);
 							
-							float progress = (float)nbScraped / (float)nbTotal; 
-							int progressPercent = Math.round(progress * 100);
-
-							fireScrapingProgressUpdated(progressPercent);
+							fireScrapingProgressUpdated(getAvancementManager().getProgressPercent());
 							
 							if(urlConWra != searchUrlConWra){
 								urlConWra.setScrapped(true);
@@ -670,37 +662,4 @@ public class ViadeoScraper {
 		public void fireScrapingKeyWordsStarted(String keyWords);
 	}
 	
-	public class PositionAvancement{
-		public PositionAvancement(int resultNumber, int scrapedPeopleNumber, int indexKeywords) {
-			super();
-			this.indexKeywords = indexKeywords;
-			this.resultNumber = resultNumber;
-			this.scrapedPeopleNumber = scrapedPeopleNumber;
-		}
-		private int resultNumber;
-		private int scrapedPeopleNumber;
-		private int indexKeywords;
-		
-		public int getResultNumber() {
-			return resultNumber;
-		}
-		public void setResultNumber(int resultNumber) {
-			this.resultNumber = resultNumber;
-		}
-		
-		public int getScrapedPeopleNumber() {
-			return scrapedPeopleNumber;
-		}
-		public void setScrapedPeopleNumber(int scrapedPeopleNumber) {
-			this.scrapedPeopleNumber = scrapedPeopleNumber;
-		}
-		
-		public int getIndexKeywords() {
-			return indexKeywords;
-		}
-		public void setIndexKeywords(int indexKeywords) {
-			this.indexKeywords = indexKeywords;
-		}
-		
-	}
 }
