@@ -1,4 +1,4 @@
-package com.extia.socialnetharvester.ui.scrapper;
+package com.extia.socialnetharvester.ui.controller;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +8,7 @@ import javax.swing.SwingWorker;
 import com.extia.socialnetharvester.http.viadeo.ViadeoScraper;
 import com.extia.socialnetharvester.http.viadeo.ViadeoScraper.ScrapingProgressListener;
 
-class ScrapTask extends SwingWorker<Void, Void> {
+public class ScrapTask extends SwingWorker<Void, Void> {
     private List<String> keyWordsList;
     private ViadeoScraper viadeoScraper;
     private List<ScrapTaskListener> scrapTaskListenerList;
@@ -93,7 +93,7 @@ class ScrapTask extends SwingWorker<Void, Void> {
     	viadeoScraper.setInteruptFlag(true);
     }
 	
-	interface ScrapTaskListener{
+	public interface ScrapTaskListener{
 		public void searchError(Exception ex);
 		public void scrapingKeyWordsStarted(String keyWords);
 		public void searchFinished();

@@ -1,8 +1,10 @@
-package com.extia.socialnetharvester.ui.setting;
+package com.extia.socialnetharvester.ui.controller;
 
 import javax.swing.JPanel;
 
-import com.extia.socialnetharvester.ui.setting.VViadeoScrapingSettings.VViadeoScrapingSettingsListener;
+import com.extia.socialnetharvester.ui.model.MViadeoScrapingSettings;
+import com.extia.socialnetharvester.ui.view.VViadeoScrapingSettings;
+import com.extia.socialnetharvester.ui.view.VViadeoScrapingSettings.VViadeoScrapingSettingsListener;
 
 
 

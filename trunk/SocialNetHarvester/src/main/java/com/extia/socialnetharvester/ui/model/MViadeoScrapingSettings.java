@@ -1,4 +1,4 @@
-package com.extia.socialnetharvester.ui.setting;
+package com.extia.socialnetharvester.ui.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +16,7 @@ public class MViadeoScrapingSettings {
 		modeleListenerList.add(modeleListener);		
 	}
 	
-	interface MViadeoScrapingSettingsListener{
+	public interface MViadeoScrapingSettingsListener{
 	}
 
 //	public void updateScrapProgress(int progress) {

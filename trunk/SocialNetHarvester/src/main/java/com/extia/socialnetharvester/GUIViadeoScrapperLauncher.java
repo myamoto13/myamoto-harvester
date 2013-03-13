@@ -11,14 +11,15 @@ import java.awt.Point;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
 import org.apache.log4j.Logger;
 
 import com.extia.socialnetharvester.http.viadeo.ViadeoScraper;
 import com.extia.socialnetharvester.io.ViadeoUserSettingsReader;
-import com.extia.socialnetharvester.ui.scrapper.GUIViadeoScrapper;
-import com.extia.socialnetharvester.ui.setting.GUIViadeoScrappingSettings;
+import com.extia.socialnetharvester.ui.controller.GUIViadeoScrapper;
+import com.extia.socialnetharvester.ui.controller.GUIViadeoScrappingSettings;
 
 public class GUIViadeoScrapperLauncher {
 	
@@ -43,7 +44,7 @@ public class GUIViadeoScrapperLauncher {
 		
 		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		
-		JPanel contentPane = new JPanel(new GridBagLayout()){
+		final JPanel contentPane = new JPanel(new GridBagLayout()){
 			protected void paintComponent(Graphics g) {
 				Color color1 = new Color(231, 248, 252);
 				Color color2 = new Color(17, 156, 190);
@@ -56,11 +57,16 @@ public class GUIViadeoScrapperLauncher {
 		};
 		contentPane.add(guiViadeoScraper.getUI(), new GridBagConstraints(0, 0, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
 		
-		JFrame frame = new JFrame();
-		frame.setSize(new Dimension(800, 600));
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().add(contentPane);
-		frame.setVisible(true);
+		SwingUtilities.invokeLater(new Runnable(){
+			public void run() {
+				JFrame frame = new JFrame();
+				frame.setSize(new Dimension(800, 600));
+				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+				frame.getContentPane().add(contentPane);
+				frame.setVisible(true);				
+			}
+		});
+		
 	}
 	
 	
