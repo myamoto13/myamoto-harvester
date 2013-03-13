@@ -1,4 +1,4 @@
-package com.extia.socialnetharvester.ui.scrapper;
+package com.extia.socialnetharvester.ui.controller;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -8,8 +8,10 @@ import java.util.Arrays;
 import javax.swing.JPanel;
 
 import com.extia.socialnetharvester.http.viadeo.ViadeoScraper;
-import com.extia.socialnetharvester.ui.scrapper.ScrapTask.ScrapTaskListener;
-import com.extia.socialnetharvester.ui.setting.GUIViadeoScrappingSettings;
+import com.extia.socialnetharvester.ui.controller.ScrapTask.ScrapTaskListener;
+import com.extia.socialnetharvester.ui.model.MViadeoScraper;
+import com.extia.socialnetharvester.ui.view.VViadeoScraper;
+import com.extia.socialnetharvester.ui.view.VViadeoScraper.VViadeoScraperListener;
 
 public class GUIViadeoScrapper implements VViadeoScraperListener {
 

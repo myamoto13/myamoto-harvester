@@ -1,4 +1,4 @@
-package com.extia.socialnetharvester.ui.scrapper;
+package com.extia.socialnetharvester.ui.view;
 
 import java.awt.Component;
 import java.awt.Cursor;
@@ -22,6 +22,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 import com.extia.socialnetharvester.ui.HyperlinkBuilder;
+import com.extia.socialnetharvester.ui.model.MViadeoScraper;
+import com.extia.socialnetharvester.ui.model.MViadeoScraper.MViadeoScraperListener;
 
 public class VViadeoScraper implements MViadeoScraperListener {
 	
@@ -374,6 +376,13 @@ public class VViadeoScraper implements MViadeoScraperListener {
 
 	public void highlightKeyword(String keyWords) {
 		keyWordJList.setSelectedValue(keyWords, true);
+	}
+	
+	public interface VViadeoScraperListener{
+		public void fireSearchLaunched(String keywords);
+		public void fireScrapingFromFileLaunched() throws IOException;
+		public void fireEnterSettings() throws Exception;
+		public void fireScrapingStopped();
 	}
 
 }

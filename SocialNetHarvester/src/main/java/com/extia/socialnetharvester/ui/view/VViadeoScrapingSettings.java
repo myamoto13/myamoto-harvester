@@ -1,4 +1,4 @@
-package com.extia.socialnetharvester.ui.setting;
+package com.extia.socialnetharvester.ui.view;
 
 import java.awt.Component;
 import java.awt.GridBagLayout;
@@ -8,7 +8,8 @@ import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import com.extia.socialnetharvester.ui.setting.MViadeoScrapingSettings.MViadeoScrapingSettingsListener;
+import com.extia.socialnetharvester.ui.model.MViadeoScrapingSettings;
+import com.extia.socialnetharvester.ui.model.MViadeoScrapingSettings.MViadeoScrapingSettingsListener;
 
 public class VViadeoScrapingSettings implements MViadeoScrapingSettingsListener {
 
@@ -54,7 +55,7 @@ public class VViadeoScrapingSettings implements MViadeoScrapingSettingsListener 
 //	}
 
 
-	interface VViadeoScrapingSettingsListener{
+	public interface VViadeoScrapingSettingsListener{
 	}
 
 	private JFrame getParentFrame() {
