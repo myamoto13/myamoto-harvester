@@ -6,13 +6,12 @@ import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
-import com.extia.socialnetharvester.GUIViadeoScrapperLauncher;
 import com.extia.socialnetharvester.ScraperException;
 import com.extia.socialnetharvester.http.viadeo.ViadeoUserSettings;
 
-public class ViadeoUserSettingsReader {
+public class ViadeoUserSettingsIO {
 	
-	static Logger logger = Logger.getLogger(GUIViadeoScrapperLauncher.class);
+	static Logger logger = Logger.getLogger(ViadeoUserSettingsIO.class);
 	
 	private String configFilePath;
 	

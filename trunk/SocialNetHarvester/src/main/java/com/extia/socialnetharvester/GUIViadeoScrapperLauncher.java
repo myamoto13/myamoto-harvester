@@ -9,15 +9,22 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Point;
 
+import javax.annotation.Resource;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.support.DefaultListableBeanFactory;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.support.GenericApplicationContext;
 
-import com.extia.socialnetharvester.http.viadeo.ViadeoScraper;
-import com.extia.socialnetharvester.io.ViadeoUserSettingsReader;
+import com.extia.socialnetharvester.http.viadeo.ScraperSystemFilesFactory;
+import com.extia.socialnetharvester.http.viadeo.ViadeoUserSettings;
+import com.extia.socialnetharvester.io.FileIO;
+import com.extia.socialnetharvester.io.ViadeoUserSettingsIO;
+import com.extia.socialnetharvester.io.csv.CSVFileIO;
 import com.extia.socialnetharvester.ui.controller.GUIViadeoScrapper;
 import com.extia.socialnetharvester.ui.controller.GUIViadeoScrappingSettings;
 
@@ -25,23 +32,40 @@ public class GUIViadeoScrapperLauncher {
 	
 	static Logger logger = Logger.getLogger(GUIViadeoScrapperLauncher.class);
 	
+	@Resource(name="settingsIO")
+	private ViadeoUserSettingsIO settingsIO;
+	
+	@Resource(name="guiSettings")
 	private GUIViadeoScrappingSettings guiSettings;
+	
+	@Resource(name="guiScraper")
 	private GUIViadeoScrapper guiViadeoScraper;
+	
+	public ViadeoUserSettingsIO getSettingsIO() {
+		return settingsIO;
+	}
+
+	public void setSettingsIO(ViadeoUserSettingsIO settingsIO) {
+		this.settingsIO = settingsIO;
+	}
+
+	public GUIViadeoScrappingSettings getGuiSettings() {
+		return guiSettings;
+	}
+
+	public void setGuiSettings(GUIViadeoScrappingSettings guiSettings) {
+		this.guiSettings = guiSettings;
+	}
+
+	public GUIViadeoScrapper getGuiViadeoScraper() {
+		return guiViadeoScraper;
+	}
+
+	public void setGuiViadeoScraper(GUIViadeoScrapper guiViadeoScraper) {
+		this.guiViadeoScraper = guiViadeoScraper;
+	}
 
 	public void launch(String configFilePath) throws Exception{
-		ViadeoUserSettingsReader settingReader = new ViadeoUserSettingsReader();
-		settingReader.setConfigFilePath(configFilePath);
-		
-		ViadeoScraper viadeoScraper = new ViadeoScrapperLauncher().initViadeoScraper(configFilePath);
-		
-		guiSettings = new GUIViadeoScrappingSettings();
-		
-		guiViadeoScraper = new GUIViadeoScrapper();
-		guiViadeoScraper.setGuiSettings(guiSettings);
-		
-		//TODO si fichier non spécifié, permettre de le spécifier dans l'UI
-		guiViadeoScraper.setViadeoScraper(viadeoScraper);
-		
 		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		
 		final JPanel contentPane = new JPanel(new GridBagLayout()){
@@ -80,8 +104,39 @@ public class GUIViadeoScrapperLauncher {
 				}
 			}
 			
-			GUIViadeoScrapperLauncher launcher = new GUIViadeoScrapperLauncher();
+			ViadeoUserSettingsIO settingsIO = new ViadeoUserSettingsIO();
+			settingsIO.setConfigFilePath(configFilePath);
+			
+			ViadeoUserSettings userSettings = settingsIO.readScrappingSettings();
+
+			if(userSettings.getViadeoLogin() == null || "".equals(userSettings.getViadeoLogin()) 
+					|| userSettings.getViadeoPassword() == null || "".equals(userSettings.getViadeoPassword())){
+				throw new ScraperException("You must provide valid viadeoLogin and viadeoPassword.");
+			}
+
+			DefaultListableBeanFactory parentBeanFactory = new DefaultListableBeanFactory();
+			parentBeanFactory.registerSingleton("userSettings", userSettings);
+			parentBeanFactory.registerSingleton("settingsIO", settingsIO);
+			GenericApplicationContext parentContext = new GenericApplicationContext(parentBeanFactory);
+			parentContext.refresh();
+			
+			ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(new String[] {"spring.xml"}, parentContext);
+			
+			ScraperSystemFilesFactory systemFilesFactory = context.getBean("systemFilesFactory", ScraperSystemFilesFactory.class);
+			
+			CSVFileIO csvIOReport = context.getBean("cSVFileWriterKeywordReport", CSVFileIO.class);
+			csvIOReport.setFile(systemFilesFactory.getKeyWordsReportFile());
+			
+			CSVFileIO csvIOResult = context.getBean("cSVFileWriterResult", CSVFileIO.class);
+			csvIOResult.setFile(systemFilesFactory.getResultFile());
+			
+			FileIO keywordListFileIO = context.getBean("keywordListFileIO", FileIO.class);
+			keywordListFileIO.setFilePath(userSettings.getKeyWordListFilePath());
+			
+			GUIViadeoScrapperLauncher launcher = context.getBean("guiLauncher", GUIViadeoScrapperLauncher.class);
 			launcher.launch(configFilePath);
+			
+			context.close();
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}

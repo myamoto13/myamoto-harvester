@@ -6,6 +6,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.annotation.Resource;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -36,7 +37,9 @@ import com.extia.socialnetharvester.http.viadeo.ViadeoUserSettings;
 
 public class ScrappingHistoryXmlIO {
 	
+	@Resource(name="systemFilesFactory")
 	private ScraperSystemFilesFactory systemFilesFactory;
+	
 	private ScraperSystemFilesFactory getSystemFilesFactory() {
 		return systemFilesFactory;
 	}
@@ -274,7 +277,7 @@ public class ScrappingHistoryXmlIO {
 			ViadeoUserSettings scrappingSettings = new ViadeoUserSettings();
 			
 			ScraperSystemFilesFactory systemFilesFactory = new ScraperSystemFilesFactory();
-			systemFilesFactory.setScrappingSettings(scrappingSettings);
+			systemFilesFactory.setUserSettings(scrappingSettings);
 			
 			ScrappingHistoryXmlIO xmlHistory = new ScrappingHistoryXmlIO();
 			xmlHistory.setSystemFilesFactory(systemFilesFactory);

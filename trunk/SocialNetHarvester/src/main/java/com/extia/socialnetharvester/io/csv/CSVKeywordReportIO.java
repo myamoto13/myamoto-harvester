@@ -4,23 +4,26 @@ import java.io.IOException;
 import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
 
+import javax.annotation.Resource;
+
 public class CSVKeywordReportIO {
 	
-	private CSVFileIO cSVFileWriter;
+	@Resource(name="cSVFileWriterKeywordReport")
+	private CSVFileIO cSVFileIO;
 	
-	private CSVFileIO getcSVFileWriter() {
-		return cSVFileWriter;
+	private CSVFileIO getcSVFileIO() {
+		return cSVFileIO;
 	}
 
-	public void setcSVFileWriter(CSVFileIO cSVFileWriter) {
-		this.cSVFileWriter = cSVFileWriter;
+	public void setcSVFileIO(CSVFileIO cSVFileWriter) {
+		this.cSVFileIO = cSVFileWriter;
 	}
 
 	public void writeTitle() throws IOException{
-		getcSVFileWriter().write(Arrays.asList(new String[]{"keyWords", "nbResultsRetrieved", "nbResults"}), StandardOpenOption.WRITE);
+		getcSVFileIO().write(Arrays.asList(new String[]{"keyWords", "nbResultsRetrieved", "nbResults"}), StandardOpenOption.WRITE);
 	}
 
 	public void writeLine(String keyWords, String nbResultsRetrieved, String nbResults) throws IOException{
-		getcSVFileWriter().write(Arrays.asList(new String[]{keyWords, nbResultsRetrieved, nbResults}), StandardOpenOption.APPEND);
+		getcSVFileIO().write(Arrays.asList(new String[]{keyWords, nbResultsRetrieved, nbResults}), StandardOpenOption.APPEND);
 	}
 }

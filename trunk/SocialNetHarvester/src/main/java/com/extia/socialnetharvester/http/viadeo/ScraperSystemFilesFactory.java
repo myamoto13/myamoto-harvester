@@ -5,33 +5,36 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import javax.annotation.Resource;
+
 import com.extia.socialnetharvester.ScraperException;
 
 public class ScraperSystemFilesFactory {
 	
 	private File resultFile;
 	private File keyWordsReportFile;
-	private ViadeoUserSettings scrappingSettings;
 	
+	@Resource(name="userSettings")
+	private ViadeoUserSettings userSettings;
 	
-	private ViadeoUserSettings getScrappingSettings() {
-		return scrappingSettings;
+	private ViadeoUserSettings getUserSettings() {
+		return userSettings;
 	}
 
-	public void setScrappingSettings(ViadeoUserSettings scrappingSettings) {
-		this.scrappingSettings = scrappingSettings;
+	public void setUserSettings(ViadeoUserSettings userSettings) {
+		this.userSettings = userSettings;
 	}
 
 	public File getKeyWordsReportFile() throws IOException, ScraperException{
 		if(keyWordsReportFile == null){
-			keyWordsReportFile = createAndBackup(getScrappingSettings().getKeyWordsReportFilePath());
+			keyWordsReportFile = createAndBackup(getUserSettings().getKeyWordsReportFilePath());
 		}
 		return keyWordsReportFile;
 	}
 
 	public File getResultFile() throws IOException, ScraperException {
 		if(resultFile == null){
-			resultFile = createAndBackup(getScrappingSettings().getResultFilePath());
+			resultFile = createAndBackup(getUserSettings().getResultFilePath());
 		}
 		return resultFile;
 	}
@@ -41,7 +44,7 @@ public class ScraperSystemFilesFactory {
 	}
 	
 	private File getWortkingDir() throws ScraperException{
-		return createAndeBackupDir(new File(getScrappingSettings().getWorkingDirPath()));
+		return createAndeBackupDir(new File(getUserSettings().getWorkingDirPath()));
 	}
 	
 	private File getBackupDir() throws ScraperException{

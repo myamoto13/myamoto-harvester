@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
@@ -36,27 +37,35 @@ import com.extia.socialnetharvester.io.ScrappingHistoryXmlIO;
 import com.extia.socialnetharvester.io.csv.CSVKeywordReportIO;
 import com.extia.socialnetharvester.io.csv.CSVPersonListIO;
 
-/**
- * @author hp
- *
- */
 public class ViadeoScraper {
 	
 	static Logger logger = Logger.getLogger(ViadeoScraper.class);
 
 	private Map<String,String> cookies;
+	
+	@Resource(name="viadeoProperties")
 	private ViadeoProperties viadeoProperties;
+	
+	@Resource(name="scrappingHistoryXmlIO")
 	private ScrappingHistoryXmlIO scrappingHistoryXml;
 	private ScrappingHistory history;
+	
+	@Resource(name="userSettings")
 	private ViadeoUserSettings scrappingSettings;
 	private HashSet<String> nameSet;
 	private List<ScrapingProgressListener> scrapingProgressListenerList;
 	private Map<UrlConnectionWrapper, Document> domBufferMap;
+	
+	@Resource(name="systemFilesFactory")
 	private ScraperSystemFilesFactory systemFilesFactory;
 	
+	@Resource(name="keywordListFileIO")
 	private FileIO keywordListFileIO;
 
-	private CSVKeywordReportIO cSVWriterKeywordReport;
+	@Resource(name="cSVKeywordReportIO")
+	private CSVKeywordReportIO cSVKeywordReportIO;
+	
+	@Resource(name="cSVWriterViadeoPersonList")
 	private CSVPersonListIO cSVWriterResult;
 	
 	private boolean interruptFlag;
@@ -82,12 +91,12 @@ public class ViadeoScraper {
 		this.keywordListFileIO = keywordListFileIO;
 	}
 	
-	private CSVKeywordReportIO getcSVWriterKeywordReport() {
-		return cSVWriterKeywordReport;
+	private CSVKeywordReportIO getcSVKeywordReportIO() {
+		return cSVKeywordReportIO;
 	}
 
-	public void setcSVWriterKeywordReport(CSVKeywordReportIO cSVWriterKeywordReport) {
-		this.cSVWriterKeywordReport = cSVWriterKeywordReport;
+	public void setcSVKeywordReportIO(CSVKeywordReportIO cSVKeywordReportIO) {
+		this.cSVKeywordReportIO = cSVKeywordReportIO;
 	}
 
 	private CSVPersonListIO getcSVWriterResult() {
@@ -234,7 +243,7 @@ public class ViadeoScraper {
 	public void scrapDatas(List<String> keyWordList) throws Exception{
 		if(keyWordList != null){
 			fireScrapingProgressUpdated(0);
-			getcSVWriterKeywordReport().writeTitle();
+			getcSVKeywordReportIO().writeTitle();
 
 			//retrieve result number for each keyWord
 			//TODO retrieve it from History ?
@@ -320,7 +329,7 @@ public class ViadeoScraper {
 								}
 							}
 							getScrappingHistoryXml().saveHistory(history);
-							getcSVWriterKeywordReport().writeLine(keyWords, "" + nbResultsRetrieved, "" + nbResults);
+							getcSVKeywordReportIO().writeLine(keyWords, "" + nbResultsRetrieved, "" + nbResults);
 
 							/*
 							 * before scraping, set total of people to scrap for this search to keep track of progress.
