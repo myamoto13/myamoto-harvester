@@ -5,20 +5,26 @@ import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.util.Arrays;
 
+import javax.annotation.Resource;
 import javax.swing.JPanel;
 
-import com.extia.socialnetharvester.http.viadeo.ViadeoScraper;
 import com.extia.socialnetharvester.ui.controller.ScrapTask.ScrapTaskListener;
 import com.extia.socialnetharvester.ui.model.MViadeoScraper;
 import com.extia.socialnetharvester.ui.view.VViadeoScraper;
 import com.extia.socialnetharvester.ui.view.VViadeoScraper.VViadeoScraperListener;
 
 public class GUIViadeoScrapper implements VViadeoScraperListener {
-
+	
+	@Resource(name="guiSettings")
 	private GUIViadeoScrappingSettings guiSettings;
 
+	@Resource(name="mViadeoScraper")
 	private MViadeoScraper modele;
+	
+	
+	@Resource(name="vViadeoScraper")
 	private VViadeoScraper vue;
+	
 	private ScrapTask scrapTask;
 	
 	private ScrapTaskListener keywordsSearchTaskListener;
@@ -27,16 +33,8 @@ public class GUIViadeoScrapper implements VViadeoScraperListener {
 	private ScrapTaskListener keywordsListSearchTaskListener;
 	private PropertyChangeListener keywordsListSearchTaskPListener;
 	
-	public GUIViadeoScrapper(){
-		MViadeoScraper modele = new MViadeoScraper();
-		VViadeoScraper vue = new VViadeoScraper();
-
-		setModele(modele);
-		setVue(vue);
-
-		vue.setModele(modele);
+	public void init(){
 		vue.addVueListener(this);
-
 		modele.addModeleListener(vue);
 	}
 
@@ -49,7 +47,7 @@ public class GUIViadeoScrapper implements VViadeoScraperListener {
 		return modele;
 	}
 
-	private void setModele(MViadeoScraper modele) {
+	public void setModele(MViadeoScraper modele) {
 		this.modele = modele;
 	}
 
@@ -57,12 +55,8 @@ public class GUIViadeoScrapper implements VViadeoScraperListener {
 		return vue;
 	}
 
-	private void setVue(VViadeoScraper vue) {
+	public void setVue(VViadeoScraper vue) {
 		this.vue = vue;
-	}
-
-	public void setViadeoScraper(ViadeoScraper viadeoScrapper){
-		getModele().setViadeoScraper(viadeoScrapper);
 	}
 
 	public JPanel getUI() throws IOException{

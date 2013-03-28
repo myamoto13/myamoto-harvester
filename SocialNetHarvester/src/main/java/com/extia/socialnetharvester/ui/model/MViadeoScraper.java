@@ -4,13 +4,20 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import com.extia.socialnetharvester.http.viadeo.ViadeoScraper;
 
 public class MViadeoScraper {
 	
 	private List<MViadeoScraperListener> modeleListenerList;
 	
+	@Resource(name="viadeoScraper")
 	private ViadeoScraper viadeoScraper;
+	
+	public MViadeoScraper() {
+		modeleListenerList = new ArrayList<MViadeoScraperListener>();
+	}
 	
 	public ViadeoScraper getViadeoScrapper() {
 		return viadeoScraper;
@@ -20,9 +27,7 @@ public class MViadeoScraper {
 		this.viadeoScraper = viadeoScraper;
 	}
 
-	public MViadeoScraper() {
-		modeleListenerList = new ArrayList<MViadeoScraperListener>();
-	}
+	
 	
 	public void addModeleListener(MViadeoScraperListener modeleListener) {
 		modeleListenerList.add(modeleListener);		

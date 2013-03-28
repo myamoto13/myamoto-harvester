@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Resource;
 import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -29,6 +30,7 @@ public class VViadeoScraper implements MViadeoScraperListener {
 	
 	private enum PageScraper{SETTINGS, KEYWORDS_SEARCH, KEYWORDLIST_SEARCH}
 
+	@Resource(name="mViadeoScraper")
 	private MViadeoScraper modele;
 
 	private JPanel ui;
