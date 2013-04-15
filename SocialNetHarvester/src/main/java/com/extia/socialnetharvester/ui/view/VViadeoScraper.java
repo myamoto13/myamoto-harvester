@@ -234,13 +234,21 @@ public class VViadeoScraper implements MViadeoScraperListener {
 			
 			Dimension prefSizSearch = getPrefSizeSearch();
 			
+			String fileKeyword = getModele().getKeyWordFilePath();
+			if(fileKeyword == null){
+				fileKeyword = "keyWordListFilePath not specified.";
+			}
+			
 			fileKeyWordTxtFld = new JTextField();
 			fileKeyWordTxtFld.setEditable(false);
-			fileKeyWordTxtFld.setText(getModele().getKeyWordFilePath());
+			fileKeyWordTxtFld.setText(fileKeyword);
 			
 			fileKeyWordTxtFld.setPreferredSize(prefSizSearch);
 			
-			keyWordJList = new JList(getModele().getKeyWordList().toArray());
+			Object[] keywordList = getModele().getKeyWordList() != null ? 
+					getModele().getKeyWordList().toArray() : new Object[0];
+			
+			keyWordJList = new JList(keywordList);
 			keyWordJList.setEnabled(false);
 			JScrollPane scrollPane = new JScrollPane(keyWordJList);
 			scrollPane.getViewport().setView(keyWordJList);

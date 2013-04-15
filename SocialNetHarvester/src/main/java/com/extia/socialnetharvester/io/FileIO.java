@@ -19,7 +19,7 @@ public class FileIO {
 	}
 
 	public List<String> read() throws IOException {
-		return Files.readAllLines(Paths.get(getFilePath()), StandardCharsets.UTF_8);
+		return getFilePath() != null ? Files.readAllLines(Paths.get(getFilePath()), StandardCharsets.UTF_8) : null;
 	}
 
 }
