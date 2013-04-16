@@ -57,7 +57,7 @@ public class ScraperSystemFilesFactory {
 	
 	private File createAndeBackupDir(File dir) throws ScraperException{
 		if(!(dir.exists() || dir.mkdir())){
-			throw new ScraperException("Le répertoire " + dir.getAbsolutePath() +" n'existe pas et ne peut être créé.");
+			throw new ScraperException("directory " + dir.getAbsolutePath() +" does not exist and can't be created.");
 		}
 		return dir;
 	}
@@ -67,7 +67,7 @@ public class ScraperSystemFilesFactory {
 		if(filePath != null){
 			File backupDir = getBackupDir();
 			if(!backupDir.exists() || !backupDir.isDirectory()){
-				throw new ScraperException("Le répertoire " + backupDir.getAbsolutePath() +" n'existe pas. Veuillez le créer.");
+				throw new ScraperException("directory " + backupDir.getAbsolutePath() +" does not exist, you have to create it.");
 			}else{
 				result = new File(filePath);
 
