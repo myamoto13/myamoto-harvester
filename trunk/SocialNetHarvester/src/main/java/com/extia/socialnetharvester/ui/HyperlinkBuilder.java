@@ -10,11 +10,13 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.border.Border;
 
-public class HyperlinkBuilder {
+public final class HyperlinkBuilder {
 	
 	private static final Color LINK_COLOR = Color.blue; 
 	private static final Border LINK_BORDER = BorderFactory.createEmptyBorder(0, 0, 1, 0); 
-	private static final Border HOVER_BORDER = BorderFactory.createMatteBorder(0, 0, 1, 0, LINK_COLOR); 
+	private static final Border HOVER_BORDER = BorderFactory.createMatteBorder(0, 0, 1, 0, LINK_COLOR);
+	
+	private HyperlinkBuilder(){}
 
 	private static class LinkMouseListener extends MouseAdapter{ 
 		public void mouseEntered(MouseEvent e){ 

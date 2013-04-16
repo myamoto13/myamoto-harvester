@@ -94,10 +94,10 @@ public class ScrapTask extends SwingWorker<Void, Void> {
     }
 	
 	public interface ScrapTaskListener{
-		public void searchError(Exception ex);
-		public void scrapingKeyWordsStarted(String keyWords);
-		public void searchFinished();
-		public void searchStarted();
+		void searchError(Exception ex);
+		void scrapingKeyWordsStarted(String keyWords);
+		void searchFinished();
+		void searchStarted();
 	}
 
 	
