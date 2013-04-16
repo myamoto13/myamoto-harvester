@@ -267,6 +267,7 @@ public class ViadeoScraper {
 						fireScrapingProgressUpdated(Math.round(((float)indexKeywords / (float)keyWordList.size()) * 100));
 						
 						UrlConnectionWrapper viadeoConWra = new UrlConnectionWrapper();
+						viadeoConWra.setMethod(Method.GET);
 						viadeoConWra.setUrl(getViadeoProperties().getViadeoSearchUrl());
 						viadeoConWra.setUserAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6");
 						viadeoConWra.setReferer(getViadeoUrl());
@@ -434,6 +435,7 @@ public class ViadeoScraper {
 
 										if(href != null && !"".equals(href)){
 											UrlConnectionWrapper subViadeoConWra = new UrlConnectionWrapper();
+											subViadeoConWra.setMethod(Method.GET);
 											subViadeoConWra.setUrl(href);
 											subViadeoConWra.setTimeout(getRequestTimeout());
 											subViadeoConWra.addCookies(getCookies());
@@ -545,6 +547,7 @@ public class ViadeoScraper {
 							String href = buttonNext.attr("abs:href");
 							if(href != null && !"".equals(href)){
 								urlConWra = new UrlConnectionWrapper();
+								urlConWra.setMethod(Method.GET);
 								urlConWra.setUrl(href);
 								urlConWra.setTimeout(getRequestTimeout());
 								urlConWra.setUserAgent(getUserAgent());

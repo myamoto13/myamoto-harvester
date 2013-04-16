@@ -1,13 +1,20 @@
 package com.extia.socialnetharvester;
+import java.io.IOException;
+import java.text.ParseException;
+
 import javax.annotation.Resource;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.xpath.XPathExpressionException;
 
 import org.apache.log4j.Logger;
+import org.xml.sax.SAXException;
 
 import com.extia.socialnetharvester.http.viadeo.ViadeoScraper;
 
 public class ViadeoScrapperLauncher {
 	
-	static Logger logger = Logger.getLogger(ViadeoScrapperLauncher.class);
+	private static Logger logger = Logger.getLogger(ViadeoScrapperLauncher.class);
 	
 	@Resource(name="viadeoScraper")
 	private ViadeoScraper viadeoScraper;
@@ -22,22 +29,17 @@ public class ViadeoScrapperLauncher {
 		this.viadeoScraper = viadeoScraper;
 	}
 
-	public void launch(String configFilePath) throws Exception{
-//		ViadeoScraper viadeoScraper = scraperBuilder.build(configFilePath);
-
+	public void launch(String configFilePath) throws XPathExpressionException, ParserConfigurationException, SAXException, IOException, ParseException, TransformerException, ScraperException, InterruptedException {
 		viadeoScraper.connectToViadeo();
 		viadeoScraper.scrapUnfinishedHistoryDatas();
 		viadeoScraper.scrapDatas(viadeoScraper.getKeyWordList());
-
 	}
 
 	public static void main(String[] args) {
 		try {
 			String configFilePath = null;
-			if(args != null){
-				if(args.length > 0){
-					configFilePath = args[0];
-				}
+			if(args != null && args.length > 0){
+				configFilePath = args[0];
 			}
 
 			ViadeoScrapperLauncher launcher = new ViadeoScrapperLauncher();

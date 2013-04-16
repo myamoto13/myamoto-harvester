@@ -21,6 +21,7 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
+import org.apache.log4j.Logger;
 import org.jsoup.Connection.Method;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
@@ -37,8 +38,13 @@ import com.extia.socialnetharvester.http.viadeo.ViadeoUserSettings;
 
 public class ScrappingHistoryXmlIO {
 	
+	private static Logger logger = Logger.getLogger(ScrappingHistoryXmlIO.class);
+	
 	@Resource(name="systemFilesFactory")
 	private ScraperSystemFilesFactory systemFilesFactory;
+	
+	@Resource(name="userSettings")
+	private ViadeoUserSettings scrappingSettings;
 	
 	private ScraperSystemFilesFactory getSystemFilesFactory() {
 		return systemFilesFactory;
@@ -46,6 +52,14 @@ public class ScrappingHistoryXmlIO {
 
 	public void setSystemFilesFactory(ScraperSystemFilesFactory systemFilesFactory) {
 		this.systemFilesFactory = systemFilesFactory;
+	}
+	
+	private ViadeoUserSettings getScrappingSettings() {
+		return scrappingSettings;
+	}
+
+	private int getRequestTimeout() {
+		return getScrappingSettings().getTimeout();
 	}
 
 	private ScrapingHistory getViadeoConnectionWrapper(Document document) throws ParserConfigurationException, XPathExpressionException, ParseException {
@@ -63,7 +77,6 @@ public class ScrappingHistoryXmlIO {
 				Node searchConnectionNode = searchConnectionNodeList.item(indexSearchCon);
 				
 				UrlConnectionWrapper searchConnection = new UrlConnectionWrapper();
-
 				searchConnection.setUrl(getAttributeValue((Element)searchConnectionNode, "url"));
 				searchConnection.setUserAgent(getAttributeValue((Element)searchConnectionNode, "userAgent"));
 				searchConnection.setReferer(getAttributeValue((Element)searchConnectionNode, "referer"));
@@ -71,11 +84,11 @@ public class ScrappingHistoryXmlIO {
 				searchConnection.setScrapped("true".equals(getAttributeValue((Element)searchConnectionNode, "scrapped")));
 				
 				
-				int timeOut = 10000;
+				int timeOut = getRequestTimeout();
 				try{
 					timeOut = (int)Float.parseFloat(getAttributeValue((Element)searchConnectionNode, "timeout"));
 				}catch(NumberFormatException ex){
-					throw ex;
+					logger.error(ex.getMessage(), ex);
 				}
 				searchConnection.setTimeout(timeOut);
 
@@ -237,6 +250,7 @@ public class ScrappingHistoryXmlIO {
 		try{
 			
 			UrlConnectionWrapper viadeoConWra = new UrlConnectionWrapper();
+			viadeoConWra.setMethod(Method.GET);
 			viadeoConWra.setUrl("http://www.viadeo.com/v/search/members");
 			viadeoConWra.setUserAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6");
 			viadeoConWra.setReferer("http://viadeo.com");
