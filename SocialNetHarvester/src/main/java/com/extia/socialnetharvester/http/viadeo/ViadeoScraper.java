@@ -419,7 +419,7 @@ public class ViadeoScraper {
 
 					splitTheme = getSplitSearchTheme(divFacetList);
 
-					logger.debug("Thème retenu pour " + nbResults + " : " + splitTheme);
+					logger.debug("split theme for " + nbResults + " : " + splitTheme);
 
 					
 					List<String> hrefList = getHrefList(divFacetList, splitTheme);
@@ -597,7 +597,7 @@ public class ViadeoScraper {
 					try{
 						result = con.execute();
 					}catch(Exception ex){
-						//TODO : traiter différemment HTTP STATUS 401
+						//TODO : traiter diffï¿½remment HTTP STATUS 401
 						logger.error(ex.getMessage());
 					}
 					if(result == null){
@@ -647,7 +647,7 @@ public class ViadeoScraper {
 				person.setPreviousCompany(getCleanCSVString(divPersonne.select("ul[class=experiences mbxs] > li:eq(1) > a:eq(2)").text()));
 				person.setOverview("");
 				/*
-				 * TODO : sur Firefox, l'élément est défini mais pas sur les pages chargées automatiquement : "div[class=details pvs prs cf] p"
+				 * TODO : sur Firefox, l'ï¿½lï¿½ment est dï¿½fini mais pas sur les pages chargï¿½es automatiquement : "div[class=details pvs prs cf] p"
 				 */
 				String profileLink = getCleanCSVString(divPersonne.select("h1[class=name mbn] > a[class=profile-link]").attr("abs:href"));
 				profileLink = profileLink.replaceAll("([^\\?])(\\?.*)", "$1");
