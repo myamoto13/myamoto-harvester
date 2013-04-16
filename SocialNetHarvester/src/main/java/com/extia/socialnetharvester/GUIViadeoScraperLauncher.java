@@ -8,12 +8,14 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Point;
+import java.io.IOException;
 
 import javax.annotation.Resource;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
@@ -28,9 +30,9 @@ import com.extia.socialnetharvester.io.csv.CSVFileIO;
 import com.extia.socialnetharvester.ui.controller.GUIViadeoScrapper;
 import com.extia.socialnetharvester.ui.controller.GUIViadeoScrappingSettings;
 
-public class GUIViadeoScrapperLauncher {
+public class GUIViadeoScraperLauncher {
 	
-	static Logger logger = Logger.getLogger(GUIViadeoScrapperLauncher.class);
+	private static Logger logger = Logger.getLogger(GUIViadeoScraperLauncher.class);
 	
 	@Resource(name="settingsIO")
 	private ViadeoUserSettingsIO settingsIO;
@@ -65,7 +67,7 @@ public class GUIViadeoScrapperLauncher {
 		this.guiViadeoScraper = guiViadeoScraper;
 	}
 
-	public void launch(String configFilePath) throws Exception{
+	public void launch(String configFilePath) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException, IOException {
 		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		
 		final JPanel contentPane = new JPanel(new GridBagLayout()){
@@ -98,10 +100,8 @@ public class GUIViadeoScrapperLauncher {
 	public static void main(String[] args) {
 		try {
 			String configFilePath = null;
-			if(args != null){
-				if(args.length > 0){
-					configFilePath = args[0];
-				}
+			if(args != null && args.length > 0){
+				configFilePath = args[0];
 			}
 			
 			ViadeoUserSettingsIO settingsIO = new ViadeoUserSettingsIO();
@@ -133,7 +133,7 @@ public class GUIViadeoScrapperLauncher {
 			FileIO keywordListFileIO = context.getBean("keywordListFileIO", FileIO.class);
 			keywordListFileIO.setFilePath(userSettings.getKeyWordListFilePath());
 			
-			GUIViadeoScrapperLauncher launcher = context.getBean("guiLauncher", GUIViadeoScrapperLauncher.class);
+			GUIViadeoScraperLauncher launcher = context.getBean("guiLauncher", GUIViadeoScraperLauncher.class);
 			launcher.launch(configFilePath);
 			
 			context.close();

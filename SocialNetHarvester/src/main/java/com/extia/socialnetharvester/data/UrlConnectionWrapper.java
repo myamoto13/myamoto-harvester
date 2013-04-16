@@ -3,8 +3,6 @@ package com.extia.socialnetharvester.data;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.annotation.Generated;
-
 import org.jsoup.Connection;
 import org.jsoup.Connection.Method;
 import org.jsoup.Jsoup;
@@ -23,7 +21,6 @@ public class UrlConnectionWrapper implements Comparable<UrlConnectionWrapper> {
 	public UrlConnectionWrapper() {
 		cookies = new HashMap<String, String>();
 		postParameterMap = new HashMap<String, String>();
-		setMethod(Method.GET);
 	}
 	
 	public boolean isScrapped() {

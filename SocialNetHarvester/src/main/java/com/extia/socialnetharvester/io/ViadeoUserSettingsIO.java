@@ -39,8 +39,7 @@ public class ViadeoUserSettingsIO {
 
 	public ViadeoUserSettings readScrappingSettings() throws ScraperException {
 		final ViadeoUserSettings result = new ViadeoUserSettings();
-		String configFilePath = getConfigFilePath();
-		if(configFilePath != null){
+		if(getConfigFilePath() != null){
 			result.setHttpCallsDelay(2000);
 			
 			List<ViadeoUserProperty> viadeoUserPropertyList = new ArrayList<ViadeoUserProperty>();
@@ -95,7 +94,7 @@ public class ViadeoUserSettingsIO {
 			
 			Properties prop = new Properties();
 	    	try {
-	    		prop.load(new FileInputStream(configFilePath));
+	    		prop.load(new FileInputStream(getConfigFilePath()));
 	    		
 	    		for (ViadeoUserProperty viadeoUserProperty : viadeoUserPropertyList) {
 	    			String propertyValue = prop.getProperty(viadeoUserProperty.getPropertyName());
@@ -128,65 +127,6 @@ public class ViadeoUserSettingsIO {
 	    			}
 				}
 	    		
-//	    		String keyWordListFilePath = prop.getProperty("keyWordListFilePath");
-//	    		if(keyWordListFilePath != null){
-//	    			result.setKeyWordListFilePath(keyWordListFilePath);
-//	    		}else{
-//	    			logger.error("keyWordListFilePath not found, you must specify one.");
-//	    		}
-	    		
-//	    		String workindDirPath = prop.getProperty("workingDirPath");
-//	    		if(workindDirPath != null){
-//	    			result.setWorkingDirPath(workindDirPath);
-//	    		}else{
-//	    			logger.warn("workindDirPath not found.");
-//		    		logger.warn("going with default : " + result.getWorkingDirPath());
-//	    		}
-	    		
-//	    		String viadeoLogin = prop.getProperty("viadeoLogin");
-//	    		if(viadeoLogin != null){
-//	    			result.setViadeoLogin(viadeoLogin);
-//	    		}else{
-//	    			logger.error("viadeoLogin not found, you must specify one.");
-//	    		}
-	    		
-//	    		String viadeoPassword = prop.getProperty("viadeoPassword");
-//	    		if(viadeoPassword != null){
-//	    			result.setViadeoPassword(viadeoPassword);
-//	    		}else{
-//	    			logger.error("viadeoPassword not found, you must specify one.");
-//	    		}
-	    		
-//	    		String userAgent = prop.getProperty("userAgent");
-//	    		if(userAgent != null){
-//	    			result.setUserAgent(userAgent);
-//	    		}else{
-//	    			logger.warn("userAgent not found.");
-//		    		logger.warn("going with default : " + result.getUserAgent());
-//	    		}
-	    		
-//	    		try{ 
-//	    			result.setTimeout(Integer.parseInt(prop.getProperty("timeout")));
-//	    		}catch(NumberFormatException ex){
-//	    			logger.warn("Could not parse timeout, got error : " + ex.getMessage());
-//		    		logger.warn("going with default (in seconds) : " + result.getTimeout());
-//	    		}
-	    		
-//	    		try{ 
-//	    			result.setHttpCallsDelay(Integer.parseInt(prop.getProperty("httpCallsDelay")));
-//	    		}catch(NumberFormatException ex){
-//	    			logger.warn("Could not parse httpCallsDelay, got error : " + ex.getMessage());
-//		    		logger.warn("going with default (in seconds) : " + result.getHttpCallsDelay());
-//	    		}
-	    		
-//	    		String autoResumeScraping = prop.getProperty("autoResumeScraping");
-//	    		if(autoResumeScraping != null){
-//	    			result.setAutoResumeScraping(Boolean.parseBoolean(autoResumeScraping));
-//	    		}else{
-//	    			logger.warn("autoResumeSearch not found.");
-//		    		logger.warn("going with default : " + result.isAutoResumeScraping());
-//	    		}
-	    		
 	    	} catch (IOException ex) {
 	    		logger.error("Could not retrieve config file, got error : " + ex.getMessage());
 	        }
@@ -195,10 +135,6 @@ public class ViadeoUserSettingsIO {
 			throw new ScraperException("Scraping config file path must be specified in the first argument.");
 		}
 		return result;
-	}
-	
-	private void writeScrappingSettings() throws ScraperException {
-		
 	}
 	
 	private class ViadeoUserProperty{

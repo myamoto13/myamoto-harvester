@@ -12,15 +12,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.jsoup.helper.StringUtil;
 
 public class CSVFileIO {
-	static Logger logger = Logger.getLogger(CSVFileIO.class);
 
 	private File file;
 
-	private final String separationCharacter = ";";
+	private static final String SEPARATION_CHAR = ";";
 
 	public File getFile() {
 		return file;
@@ -35,11 +33,9 @@ public class CSVFileIO {
 			BufferedWriter keyWordReportFW = null;
 			try{
 				keyWordReportFW = Files.newBufferedWriter(Paths.get(file.getAbsolutePath()), StandardCharsets.UTF_8, new OpenOption[] {openOption});
-				keyWordReportFW.append(StringUtil.join(stringList, separationCharacter));
+				keyWordReportFW.append(StringUtil.join(stringList, SEPARATION_CHAR));
 				keyWordReportFW.append(System.lineSeparator());
 				keyWordReportFW.close();
-			}catch(IOException ex){
-				throw ex;
 			}finally{
 				if(keyWordReportFW != null){
 					keyWordReportFW.close();
@@ -54,7 +50,7 @@ public class CSVFileIO {
 		if(lineList != null){
 			result = new ArrayList<List<String>>();
 			for (String line : lineList) {
-				String[] valueList = line.split(separationCharacter);
+				String[] valueList = line.split(SEPARATION_CHAR);
 				if(valueList != null){
 					result.add(Arrays.asList(valueList));
 				}
