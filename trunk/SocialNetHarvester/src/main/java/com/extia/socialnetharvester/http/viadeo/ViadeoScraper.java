@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Resource;
 import javax.xml.parsers.ParserConfigurationException;
@@ -28,7 +29,7 @@ import org.jsoup.select.Elements;
 import org.xml.sax.SAXException;
 
 import com.extia.socialnetharvester.ScraperException;
-import com.extia.socialnetharvester.data.ScrappingHistory;
+import com.extia.socialnetharvester.data.ScrapingHistory;
 import com.extia.socialnetharvester.data.UrlConnectionWrapper;
 import com.extia.socialnetharvester.data.ViadeoPerson;
 import com.extia.socialnetharvester.http.viadeo.avancement.AvancementManager;
@@ -39,7 +40,7 @@ import com.extia.socialnetharvester.io.csv.CSVPersonListIO;
 
 public class ViadeoScraper {
 	
-	static Logger logger = Logger.getLogger(ViadeoScraper.class);
+	private static Logger logger = Logger.getLogger(ViadeoScraper.class);
 
 	private Map<String,String> cookies;
 	
@@ -48,11 +49,11 @@ public class ViadeoScraper {
 	
 	@Resource(name="scrappingHistoryXmlIO")
 	private ScrappingHistoryXmlIO scrappingHistoryXml;
-	private ScrappingHistory history;
+	private ScrapingHistory history;
 	
 	@Resource(name="userSettings")
 	private ViadeoUserSettings scrappingSettings;
-	private HashSet<String> nameSet;
+	private Set<String> nameSet;
 	private List<ScrapingProgressListener> scrapingProgressListenerList;
 	private Map<UrlConnectionWrapper, Document> domBufferMap;
 	
@@ -138,13 +139,13 @@ public class ViadeoScraper {
 		return domBufferMap;
 	}
 
-	private ScrappingHistory getHistory() throws XPathExpressionException, ParserConfigurationException, SAXException, IOException, ParseException, TransformerException, ScraperException {
+	private ScrapingHistory getHistory() throws XPathExpressionException, ParserConfigurationException, SAXException, IOException, ParseException, TransformerException, ScraperException {
 		if(history == null){
 			logger.info("loading history..");
 			history = getScrappingHistoryXml().readScrappingHistory();
 
 			if(history == null){
-				history = new ScrappingHistory();
+				history = new ScrapingHistory();
 				history.setDate(new Date());
 				getScrappingHistoryXml().saveHistory(history);
 			}
@@ -191,7 +192,7 @@ public class ViadeoScraper {
 	}
 
 
-	public void connectToViadeo() throws Exception{
+	public void connectToViadeo() throws IOException, InterruptedException {
 		int requestsTimeout = getRequestTimeout();
 
 		String viadeoURL = getViadeoUrl();
@@ -219,7 +220,7 @@ public class ViadeoScraper {
 		logger.info("logged.");
 	}
 
-	public void scrapUnfinishedHistoryDatas() throws Exception{
+	public void scrapUnfinishedHistoryDatas() throws XPathExpressionException, ParserConfigurationException, SAXException, IOException, ParseException, TransformerException, ScraperException, InterruptedException {
 		List<UrlConnectionWrapper> historyList = getHistory().getSearchConnectionList();
 
 
@@ -240,7 +241,7 @@ public class ViadeoScraper {
 		return getKeywordListFileIO().read();
 	}
 
-	public void scrapDatas(List<String> keyWordList) throws Exception{
+	public void scrapDatas(List<String> keyWordList) throws IOException, XPathExpressionException, ParserConfigurationException, SAXException, ParseException, TransformerException, ScraperException, InterruptedException {
 		if(keyWordList != null){
 			fireScrapingProgressUpdated(0);
 			getcSVKeywordReportIO().writeTitle();
@@ -288,7 +289,7 @@ public class ViadeoScraper {
 						viadeoConWra.putPostParameter("language", "");
 						viadeoConWra.putPostParameter("btnRadio", "0020");
 
-						ScrappingHistory history = getHistory();
+						ScrapingHistory scrapingHistory = getHistory();
 
 						List<UrlConnectionWrapper> urlConnexionToScrapList = getSearchUrlList(viadeoConWra);
 						if(urlConnexionToScrapList != null) {
@@ -320,15 +321,15 @@ public class ViadeoScraper {
 							 */
 							for (Iterator<UrlConnectionWrapper> it = urlConnexionToScrapList.iterator(); it.hasNext();) {
 								UrlConnectionWrapper conWra = it.next();
-								int index = history.getSearchConnectionList().indexOf(conWra);
+								int index = scrapingHistory.getSearchConnectionList().indexOf(conWra);
 
-								if (index > -1 && history.getSearchConnectionList().get(index).isScrapped()){
+								if (index > -1 && scrapingHistory.getSearchConnectionList().get(index).isScrapped()){
 									it.remove();
 								}else{
-									history.addSearchConnection(conWra);
+									scrapingHistory.addSearchConnection(conWra);
 								}
 							}
-							getScrappingHistoryXml().saveHistory(history);
+							getScrappingHistoryXml().saveHistory(scrapingHistory);
 							getcSVKeywordReportIO().writeLine(keyWords, "" + nbResultsRetrieved, "" + nbResults);
 
 							/*
@@ -353,8 +354,6 @@ public class ViadeoScraper {
 
 					fireScrapingKeyWordsStarted(keyWords);
 
-					System.out.println(urlsForKeywordsMap.get(keyWords));
-					
 					scrapSearchPageList(urlsForKeywordsMap.get(keyWords));
 				}
 			}
@@ -378,7 +377,7 @@ public class ViadeoScraper {
 		return result;
 	}
 
-	private List<UrlConnectionWrapper> getSearchUrlList(UrlConnectionWrapper viadeoConWra) throws Exception {
+	private List<UrlConnectionWrapper> getSearchUrlList(UrlConnectionWrapper viadeoConWra) throws InterruptedException, IOException {
 		List<UrlConnectionWrapper> result = new ArrayList<UrlConnectionWrapper>();
 		if(viadeoConWra != null){
 			if(isInterruptFlag()){
@@ -474,7 +473,7 @@ public class ViadeoScraper {
 		return result;
 	}
 
-	private void scrapSearchPageList(List<UrlConnectionWrapper> searchUrlConnexionToScrapList) throws Exception {
+	private void scrapSearchPageList(List<UrlConnectionWrapper> searchUrlConnexionToScrapList) throws IOException, ScraperException, InterruptedException, XPathExpressionException, ParserConfigurationException, SAXException, ParseException, TransformerException {
 		String resultFilePath =  getSystemFilesFactory().getResultFilePath();
 		if(searchUrlConnexionToScrapList != null && resultFilePath != null){
 
@@ -601,9 +600,9 @@ public class ViadeoScraper {
 				person.setPreviousJob(getCleanCSVString(divPersonne.select("ul[class=experiences mbxs] > li:eq(1) > a:eq(1)").text()));
 				person.setPreviousCompany(getCleanCSVString(divPersonne.select("ul[class=experiences mbxs] > li:eq(1) > a:eq(2)").text()));
 				person.setOverview("");
-				//TODO : sur Firefox, l'élément est défini mais pas sur les pages chargées automatiquement.
-				//					String overview = getCleanCSVString(divPersonne.select("div[class=details pvs prs cf] p").text());
-
+				/*
+				 * TODO : sur Firefox, l'élément est défini mais pas sur les pages chargées automatiquement : "div[class=details pvs prs cf] p"
+				 */
 				String profileLink = getCleanCSVString(divPersonne.select("h1[class=name mbn] > a[class=profile-link]").attr("abs:href"));
 				profileLink = profileLink.replaceAll("([^\\?])(\\?.*)", "$1");
 				person.setProfileLink(profileLink);
@@ -614,7 +613,7 @@ public class ViadeoScraper {
 		return result;
 	}
 
-	private HashSet<String> getNameSet() throws IOException, ScraperException {
+	private Set<String> getNameSet() throws IOException, ScraperException {
 		if(nameSet == null){
 			nameSet = new HashSet<String>();
 			List<ViadeoPerson> personList = getcSVWriterResult().read();
@@ -666,9 +665,8 @@ public class ViadeoScraper {
 	}
 	
 	public interface ScrapingProgressListener{
-		public void progressUpdated(int progress);
-
-		public void fireScrapingKeyWordsStarted(String keyWords);
+		void progressUpdated(int progress);
+		void fireScrapingKeyWordsStarted(String keyWords);
 	}
 	
 }

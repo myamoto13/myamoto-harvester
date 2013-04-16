@@ -59,7 +59,7 @@ public class MViadeoScraper {
 		}
 	}
 
-	public void showSettings() throws Exception {
+	public void showSettings() throws IOException {
 		for (MViadeoScraperListener modeleListener : modeleListenerList) {
 			modeleListener.showSettings();
 		}
@@ -86,7 +86,7 @@ public class MViadeoScraper {
 	public interface MViadeoScraperListener{
 			void error(Exception ex);
 			void searchEnabled(boolean enableb);
-			void showSettings() throws Exception;
+			void showSettings() throws IOException ;
 			void progressUpdatedList(int progress);
 			void progressUpdated(int progress);
 			void searchEnabledList(boolean enabled);
