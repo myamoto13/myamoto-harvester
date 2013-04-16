@@ -36,16 +36,30 @@ import com.extia.socialnetharvester.data.UrlConnectionWrapper;
 import com.extia.socialnetharvester.http.viadeo.ScraperSystemFilesFactory;
 import com.extia.socialnetharvester.http.viadeo.ViadeoUserSettings;
 
-public class ScrappingHistoryXmlIO {
+public class ScrapingHistoryXmlIO {
 	
-	private static Logger logger = Logger.getLogger(ScrappingHistoryXmlIO.class);
+	private static Logger logger = Logger.getLogger(ScrapingHistoryXmlIO.class);
+	
+	private static final String PROPERTY_URL = "url";
+	private static final String PROPERTY_DATE = "date";
+	private static final String PROPERTY_USERAGENT = "userAgent";
+	private static final String PROPERTY_REFERER = "referer";
+	private static final String PROPERTY_METHOD = "method";
+	private static final String PROPERTY_TIMEOUT = "timeout";
+	
+	private static final String PROPERTY_NAME = "name";
+	private static final String PROPERTY_VALUE = "value";
 	
 	@Resource(name="systemFilesFactory")
 	private ScraperSystemFilesFactory systemFilesFactory;
 	
 	@Resource(name="userSettings")
-	private ViadeoUserSettings scrappingSettings;
+	private ViadeoUserSettings userSettings;
 	
+	public void setUserSettings(ViadeoUserSettings scrappingSettings) {
+		this.userSettings = scrappingSettings;
+	}
+
 	private ScraperSystemFilesFactory getSystemFilesFactory() {
 		return systemFilesFactory;
 	}
@@ -54,12 +68,12 @@ public class ScrappingHistoryXmlIO {
 		this.systemFilesFactory = systemFilesFactory;
 	}
 	
-	private ViadeoUserSettings getScrappingSettings() {
-		return scrappingSettings;
+	private ViadeoUserSettings getUserSettings() {
+		return userSettings;
 	}
 
 	private int getRequestTimeout() {
-		return getScrappingSettings().getTimeout();
+		return getUserSettings().getTimeout();
 	}
 
 	private ScrapingHistory getViadeoConnectionWrapper(Document document) throws ParserConfigurationException, XPathExpressionException, ParseException {
@@ -69,7 +83,7 @@ public class ScrappingHistoryXmlIO {
 		if(rootEle != null){
 			
 			result = new ScrapingHistory();
-			result.setDate(getDateFormat().parse(getAttributeValue((Element)rootEle, "date")));
+			result.setDate(getDateFormat().parse(getAttributeValue((Element)rootEle, PROPERTY_DATE)));
 			
 			NodeList searchConnectionNodeList = getNodeList(document, "//ScrappingHistory/ViadeoSearch");
 			for (int indexSearchCon = 0; indexSearchCon < searchConnectionNodeList.getLength(); indexSearchCon++) {
@@ -77,16 +91,16 @@ public class ScrappingHistoryXmlIO {
 				Node searchConnectionNode = searchConnectionNodeList.item(indexSearchCon);
 				
 				UrlConnectionWrapper searchConnection = new UrlConnectionWrapper();
-				searchConnection.setUrl(getAttributeValue((Element)searchConnectionNode, "url"));
-				searchConnection.setUserAgent(getAttributeValue((Element)searchConnectionNode, "userAgent"));
-				searchConnection.setReferer(getAttributeValue((Element)searchConnectionNode, "referer"));
-				searchConnection.setMethod(Method.valueOf(getAttributeValue((Element)searchConnectionNode, "method")));
-				searchConnection.setScrapped("true".equals(getAttributeValue((Element)searchConnectionNode, "scrapped")));
+				searchConnection.setUrl(getAttributeValue((Element)searchConnectionNode, PROPERTY_URL));
+				searchConnection.setUserAgent(getAttributeValue((Element)searchConnectionNode, PROPERTY_USERAGENT));
+				searchConnection.setReferer(getAttributeValue((Element)searchConnectionNode, PROPERTY_REFERER));
+				searchConnection.setMethod(Method.valueOf(getAttributeValue((Element)searchConnectionNode, PROPERTY_METHOD)));
+				searchConnection.setScrapped(Boolean.valueOf((getAttributeValue((Element)searchConnectionNode, "scrapped"))));
 				
 				
 				int timeOut = getRequestTimeout();
 				try{
-					timeOut = (int)Float.parseFloat(getAttributeValue((Element)searchConnectionNode, "timeout"));
+					timeOut = (int)Float.parseFloat(getAttributeValue((Element)searchConnectionNode, PROPERTY_TIMEOUT));
 				}catch(NumberFormatException ex){
 					logger.error(ex.getMessage(), ex);
 				}
@@ -95,14 +109,14 @@ public class ScrappingHistoryXmlIO {
 				NodeList postParamNodeList = getNodeList(searchConnectionNode, "PostParameterList/PostParameter");
 				for (int i = 0; i < postParamNodeList.getLength(); i++) {
 					Element element = (Element)postParamNodeList.item(i);
-					searchConnection.putPostParameter(element.getAttribute("name"), element.getAttribute("value"));
+					searchConnection.putPostParameter(element.getAttribute(PROPERTY_NAME), element.getAttribute(PROPERTY_VALUE));
 				}
 
 
 				NodeList cookieNodeList = getNodeList(searchConnectionNode, "CookieList/Cookie");
 				for (int i = 0; i < cookieNodeList.getLength(); i++) {
 					Element element = (Element)cookieNodeList.item(i);
-					searchConnection.putCookie(element.getAttribute("name"), element.getAttribute("value"));
+					searchConnection.putCookie(element.getAttribute(PROPERTY_NAME), element.getAttribute(PROPERTY_VALUE));
 				}
 				
 				result.addSearchConnection(searchConnection);
@@ -152,7 +166,7 @@ public class ScrappingHistoryXmlIO {
 			
 			result = docBuilder.newDocument();
 			Element rootElement = result.createElement("ScrappingHistory");
-			addAttribute(result, rootElement, "date", getDateFormat().format(scrappingHistory.getDate()));
+			addAttribute(result, rootElement, PROPERTY_DATE, getDateFormat().format(scrappingHistory.getDate()));
 			
 			result.appendChild(rootElement);
 			
@@ -162,11 +176,11 @@ public class ScrappingHistoryXmlIO {
 				rootElement.appendChild(viadeoSearchEle);
 
 				addAttribute(result, viadeoSearchEle, "scrapped", searchConnection.isScrapped() ? "true" : "false");
-				addAttribute(result, viadeoSearchEle, "url", searchConnection.getUrl());
-				addAttribute(result, viadeoSearchEle, "userAgent", searchConnection.getUserAgent());
-				addAttribute(result, viadeoSearchEle, "referer", searchConnection.getReferer());
-				addAttribute(result, viadeoSearchEle, "timeout", "" + searchConnection.getTimeout());
-				addAttribute(result, viadeoSearchEle, "method", "" + searchConnection.getMethod().toString());
+				addAttribute(result, viadeoSearchEle, PROPERTY_URL, searchConnection.getUrl());
+				addAttribute(result, viadeoSearchEle, PROPERTY_USERAGENT, searchConnection.getUserAgent());
+				addAttribute(result, viadeoSearchEle, PROPERTY_REFERER, searchConnection.getReferer());
+				addAttribute(result, viadeoSearchEle, PROPERTY_TIMEOUT, "" + searchConnection.getTimeout());
+				addAttribute(result, viadeoSearchEle, PROPERTY_METHOD, "" + searchConnection.getMethod().toString());
 				
 				Element postParamListEle = result.createElement("PostParameterList");
 				viadeoSearchEle.appendChild(postParamListEle);
@@ -175,8 +189,8 @@ public class ScrappingHistoryXmlIO {
 
 					Element postParamEle = result.createElement("PostParameter");
 
-					addAttribute(result, postParamEle, "name", paramName);
-					addAttribute(result, postParamEle, "value", paramValue);
+					addAttribute(result, postParamEle, PROPERTY_NAME, paramName);
+					addAttribute(result, postParamEle, PROPERTY_VALUE, paramValue);
 
 					postParamListEle.appendChild(postParamEle);
 				}
@@ -188,8 +202,8 @@ public class ScrappingHistoryXmlIO {
 
 					Element cookieEle = result.createElement("Cookie");
 
-					addAttribute(result, cookieEle, "name", cookieName);
-					addAttribute(result, cookieEle, "value", cookieValue);
+					addAttribute(result, cookieEle, PROPERTY_NAME, cookieName);
+					addAttribute(result, cookieEle, PROPERTY_VALUE, cookieValue);
 
 					cookieListEle.appendChild(cookieEle);
 				}
@@ -245,65 +259,4 @@ public class ScrappingHistoryXmlIO {
 		return result;
 	}
 	
-	
-	public static void main(String[] args) {
-		try{
-			
-			UrlConnectionWrapper viadeoConWra = new UrlConnectionWrapper();
-			viadeoConWra.setMethod(Method.GET);
-			viadeoConWra.setUrl("http://www.viadeo.com/v/search/members");
-			viadeoConWra.setUserAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6");
-			viadeoConWra.setReferer("http://viadeo.com");
-			viadeoConWra.setTimeout(10000);
-			viadeoConWra.putCookie("SESSIONID", "12345");
-			viadeoConWra.putPostParameter("ga_from", "Tfrom:search-members;Bfrom:default-form;Efrom:;");
-			viadeoConWra.putPostParameter("fullName", "");
-			viadeoConWra.putPostParameter("keywords", "'" + "J2EE" + "'");
-			viadeoConWra.putPostParameter("search", "Chercher");
-			viadeoConWra.putPostParameter("company", "");
-			viadeoConWra.putPostParameter("companyExactSearch", "on");
-			viadeoConWra.putPostParameter("position", "");
-			viadeoConWra.putPostParameter("positionExactSearch", "off");
-			viadeoConWra.putPostParameter("schoolName", "");
-			viadeoConWra.putPostParameter("sector", "on");
-			viadeoConWra.putPostParameter("town", "");
-			viadeoConWra.putPostParameter("countryForm", "");
-			viadeoConWra.putPostParameter("county", "");
-			viadeoConWra.putPostParameter("joinDateId", "0020");
-			viadeoConWra.putPostParameter("language", "");
-			viadeoConWra.putPostParameter("btnRadio", "0020");
-			
-			UrlConnectionWrapper viadeoConWra2 = new UrlConnectionWrapper();
-			viadeoConWra2.setUrl("https://secure.viadeo.com/r/account/authentication/signin");
-			viadeoConWra2.setUserAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6");
-			viadeoConWra2.setReferer("http://viadeo.com");
-			viadeoConWra2.setTimeout(10000);
-			viadeoConWra2.putCookie("SESSIONID", "1234567");
-			viadeoConWra2.putPostParameter("email", "thonio.banderas@laposte.net");
-			viadeoConWra2.putPostParameter("password", "extiapaca");
-			viadeoConWra2.setMethod(Method.POST);
-			
-			ScrapingHistory scrappingHistory = new ScrapingHistory();
-			scrappingHistory.setDate(new Date());
-			scrappingHistory.addSearchConnection(viadeoConWra);
-			scrappingHistory.addSearchConnection(viadeoConWra2);
-			
-			ViadeoUserSettings scrappingSettings = new ViadeoUserSettings();
-			
-			ScraperSystemFilesFactory systemFilesFactory = new ScraperSystemFilesFactory();
-			systemFilesFactory.setUserSettings(scrappingSettings);
-			
-			ScrappingHistoryXmlIO xmlHistory = new ScrappingHistoryXmlIO();
-			xmlHistory.setSystemFilesFactory(systemFilesFactory);
-			xmlHistory.saveHistory(scrappingHistory);
-			
-
-			ScrapingHistory scrappingHistory2 = xmlHistory.readScrappingHistory();
-			
-			System.out.println(scrappingHistory.getSearchConnectionList().equals(scrappingHistory2.getSearchConnectionList()));
-		}catch(Exception ex){
-			ex.printStackTrace();
-		}
-	}
-
 }

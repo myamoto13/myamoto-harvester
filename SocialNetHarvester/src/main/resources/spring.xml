@@ -8,7 +8,7 @@
 
 	<context:component-scan base-package="com.extia" />
 	
-	<bean class="com.extia.socialnetharvester.GUIViadeoScrapperLauncher" id="guiLauncher" name="guiLauncher" />
+	<bean class="com.extia.socialnetharvester.GUIViadeoScraperLauncher" id="guiLauncher" name="guiLauncher" />
 	
 	<bean class="com.extia.socialnetharvester.ui.controller.GUIViadeoScrapper" id="guiScraper" name="guiScraper" init-method="init"/>
 	<bean class="com.extia.socialnetharvester.ui.controller.GUIViadeoScrappingSettings" id="guiSettings" name="guiSettings" init-method="init" />
@@ -19,14 +19,12 @@
 	<bean class="com.extia.socialnetharvester.ui.model.MViadeoScraper" id="mViadeoScraper" name="mViadeoScraper" />
 	<bean class="com.extia.socialnetharvester.ui.model.MViadeoScrapingSettings" id="mViadeoScrapingSettings" name="mViadeoScrapingSettings" />
 	
-	
-	
 	<bean class="com.extia.socialnetharvester.http.viadeo.ViadeoScraper" id="viadeoScraper" name="viadeoScraper" />
 	<bean class="com.extia.socialnetharvester.http.viadeo.ScraperSystemFilesFactory" id="systemFilesFactory" name="systemFilesFactory" />
 	<bean class="com.extia.socialnetharvester.http.viadeo.ViadeoProperties" id="viadeoProperties" name="viadeoProperties" />
 	
 	<bean class="com.extia.socialnetharvester.io.FileIO" id="keywordListFileIO" name="keywordListFileIO" />
-	<bean class="com.extia.socialnetharvester.io.ScrappingHistoryXmlIO" id="scrappingHistoryXmlIO" name="scrappingHistoryXmlIO" /> 
+	<bean class="com.extia.socialnetharvester.io.ScrapingHistoryXmlIO" id="scrapingHistoryXmlIO" name="scrapingHistoryXmlIO" /> 
 	<bean class="com.extia.socialnetharvester.io.ViadeoUserSettingsIO" id="settingsIO" name="settingsIO" />
 	<bean class="com.extia.socialnetharvester.io.csv.CSVFileIO" id="cSVFileWriterResult" name="cSVFileWriterResult" />
 	<bean class="com.extia.socialnetharvester.io.csv.CSVFileIO" id="cSVFileWriterKeywordReport" name="cSVFileWriterKeywordReport" />

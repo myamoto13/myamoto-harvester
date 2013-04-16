@@ -41,20 +41,11 @@ public class VViadeoScraper implements MViadeoScraperListener {
 	
 	private JPanel uiSearch;
 	private JTextField keywordsTxtFld;
-	private JButton scrapButton;
-	private JButton stopButton;
-	private JButton linkModeKeywordlist;
-	private JButton linkSettings;
 	private JProgressBar progressBar;
 	private JPanel pnlSearch;
 	private JPanel pnlProgress;
 	
 	private JPanel uiSearchList;
-	private JTextField fileKeyWordTxtFld;
-	private JButton scrapButtonList;
-	private JButton stopButtonList;
-	private JButton linkModeKeyword;
-	private JButton linkSettingsList;
 	private JProgressBar progressBarList;
 	private JPanel pnlSearchList;
 	private JPanel pnlProgressList;
@@ -62,8 +53,6 @@ public class VViadeoScraper implements MViadeoScraperListener {
 	
 	private JPanel uiSettings;
 	private JPanel pnlSettings;
-	private JButton linkModeKeywordlistSttgs;
-	private JButton linkModeKeywordSttgs;
 	
 	private List<VViadeoScraperListener> vueListenerList;
 	
@@ -89,7 +78,7 @@ public class VViadeoScraper implements MViadeoScraperListener {
 
 	private JPanel getUiSearch(){
 		if(uiSearch == null){
-			scrapButton = new JButton(new ImageIcon(getClass().getResource("/icones/website-scraper-icon-32.png")));
+			JButton scrapButton = new JButton(new ImageIcon(getClass().getResource("/icones/website-scraper-icon-32.png")));
 			scrapButton.setToolTipText("perform scraping");
 			scrapButton.addActionListener(new AbstractAction() {
 				public void actionPerformed(ActionEvent e) {
@@ -105,7 +94,7 @@ public class VViadeoScraper implements MViadeoScraperListener {
 
 			});
 
-			stopButton = new JButton(new ImageIcon(getClass().getResource("/icones/stop_icon_32.png")));
+			JButton stopButton = new JButton(new ImageIcon(getClass().getResource("/icones/stop_icon_32.png")));
 			stopButton.setToolTipText("stop scraping");
 			stopButton.addActionListener(new AbstractAction() {
 				public void actionPerformed(ActionEvent e) {
@@ -117,7 +106,7 @@ public class VViadeoScraper implements MViadeoScraperListener {
 				}
 			});
 			
-			linkModeKeywordlist = HyperlinkBuilder.buildLink(new JButton("keywords-list"));
+			JButton linkModeKeywordlist = HyperlinkBuilder.buildLink(new JButton("keywords-list"));
 			linkModeKeywordlist.addActionListener(new AbstractAction() {
 				public void actionPerformed(ActionEvent e) {
 					try{
@@ -129,7 +118,7 @@ public class VViadeoScraper implements MViadeoScraperListener {
 			});
 			
 
-			linkSettings = HyperlinkBuilder.buildLink(new JButton("Settings"));
+			JButton linkSettings = HyperlinkBuilder.buildLink(new JButton("Settings"));
 			linkSettings.addActionListener(new AbstractAction() {
 				public void actionPerformed(ActionEvent e) {
 					try{
@@ -146,9 +135,7 @@ public class VViadeoScraper implements MViadeoScraperListener {
 			keywordsTxtFld = new JTextField();
 			keywordsTxtFld.setPreferredSize(prefSizSearch);
 			
-			int maxValue = 100;
-
-			progressBar = new JProgressBar(0, maxValue);
+			progressBar = new JProgressBar(0, 100);
 			progressBar.setValue(0);
 			progressBar.setStringPainted(true);
 			progressBar.setPreferredSize(prefSizSearch);
@@ -187,69 +174,6 @@ public class VViadeoScraper implements MViadeoScraperListener {
 	
 	private Component getUiSearchList() throws IOException {
 		if(uiSearchList == null){
-			scrapButtonList = new JButton(new ImageIcon(getClass().getResource("/icones/website-scraper-icon-32.png")));
-			scrapButtonList.setToolTipText("perform scraping");
-			scrapButtonList.addActionListener(new AbstractAction() {
-				public void actionPerformed(ActionEvent e) {
-					try{
-						fireScrapingFromFileLaunched();
-					}catch(Exception ex){
-						error(ex);
-					}
-				}
-
-			});
-
-			stopButtonList = new JButton(new ImageIcon(getClass().getResource("/icones/stop_icon_32.png")));
-			stopButtonList.setToolTipText("stop scraping");
-			stopButtonList.addActionListener(new AbstractAction() {
-				public void actionPerformed(ActionEvent e) {
-					try{
-						fireScrapingStopped();
-					}catch(Exception ex){
-						error(ex);
-					}
-				}
-
-			});
-			
-			linkModeKeyword = HyperlinkBuilder.buildLink(new JButton("keywords"));
-			linkModeKeyword.addActionListener(new AbstractAction() {
-				public void actionPerformed(ActionEvent e) {
-					try{
-						fillUI(PageScraper.KEYWORDS_SEARCH);
-					}catch(Exception ex){
-						error(ex);
-					}
-				}
-			});
-			
-
-			linkSettingsList = HyperlinkBuilder.buildLink(new JButton("Settings"));
-			linkSettingsList.addActionListener(new AbstractAction() {
-				public void actionPerformed(ActionEvent e) {
-					try{
-						fireEnterSettings();
-					}catch(Exception ex){
-						error(ex);
-					}
-				}
-
-			});
-			
-			Dimension prefSizSearch = getPrefSizeSearch();
-			
-			String fileKeyword = getModele().getKeyWordFilePath();
-			if(fileKeyword == null){
-				fileKeyword = "keyWordListFilePath not specified.";
-			}
-			
-			fileKeyWordTxtFld = new JTextField();
-			fileKeyWordTxtFld.setEditable(false);
-			fileKeyWordTxtFld.setText(fileKeyword);
-			
-			fileKeyWordTxtFld.setPreferredSize(prefSizSearch);
-			
 			Object[] keywordList = getModele().getKeyWordList() != null ? 
 					getModele().getKeyWordList().toArray() : new Object[0];
 			
@@ -259,30 +183,9 @@ public class VViadeoScraper implements MViadeoScraperListener {
 			scrollPane.getViewport().setView(keyWordJList);
 			scrollPane.getViewport().setOpaque(false);
 
-			progressBarList = new JProgressBar(0, 100);
-			progressBarList.setValue(0);
-			progressBarList.setStringPainted(true);
-			progressBarList.setPreferredSize(prefSizSearch);
-
-
-			pnlProgressList = new JPanel(new GridBagLayout());
-			pnlProgressList.setOpaque(false);
-			pnlProgressList.setVisible(false);
-			pnlProgressList.add(stopButtonList, new GridBagConstraints(0, 0, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(5, 0, 0, 0), 0, 0));
-			pnlProgressList.add(progressBarList, new GridBagConstraints(1, 0, 1, 1, 1, 0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 0, 0), 0, 0));
-
-
-			JPanel pnlLinks = new JPanel(new GridBagLayout());
-			pnlLinks.setOpaque(false);
-			pnlLinks.add(linkSettingsList, new GridBagConstraints(0, 0, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
-			pnlLinks.add(linkModeKeyword, new GridBagConstraints(1, 0, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(0, 5, 0, 0), 0, 0));
+			createPnlProgressBarList();
+			createPnlSearchList();
 			
-			pnlSearchList = new JPanel(new GridBagLayout());
-			pnlSearchList.setOpaque(false);
-			pnlSearchList.add(scrapButtonList, new GridBagConstraints(0, 0, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
-			pnlSearchList.add(fileKeyWordTxtFld, new GridBagConstraints(1, 0, 1, 1, 1, 0, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(0, 5, 0, 0), 0, 0));
-			pnlSearchList.add(pnlLinks, new GridBagConstraints(0, 1, 2, 1, 1, 0, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(0, 5, 0, 0), 0, 0));
-
 			uiSearchList = new JPanel(new GridBagLayout());
 			uiSearchList.setOpaque(false);
 			
@@ -296,9 +199,98 @@ public class VViadeoScraper implements MViadeoScraperListener {
 		return uiSearchList;
 	}
 	
+	private void createPnlSearchList() {
+		JButton linkModeKeyword = HyperlinkBuilder.buildLink(new JButton("keywords"));
+		linkModeKeyword.addActionListener(new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				try{
+					fillUI(PageScraper.KEYWORDS_SEARCH);
+				}catch(Exception ex){
+					error(ex);
+				}
+			}
+		});
+		
+		JButton linkSettingsList = HyperlinkBuilder.buildLink(new JButton("Settings"));
+		linkSettingsList.addActionListener(new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				try{
+					fireEnterSettings();
+				}catch(Exception ex){
+					error(ex);
+				}
+			}
+
+		});
+		
+		JButton scrapButtonList = new JButton(new ImageIcon(getClass().getResource("/icones/website-scraper-icon-32.png")));
+		scrapButtonList.setToolTipText("perform scraping");
+		scrapButtonList.addActionListener(new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				try{
+					fireScrapingFromFileLaunched();
+				}catch(Exception ex){
+					error(ex);
+				}
+			}
+		});
+		
+		String fileKeyword = getModele().getKeyWordFilePath();
+		if(fileKeyword == null){
+			fileKeyword = "keyWordListFilePath not specified.";
+		}
+		
+		JTextField fileKeyWordTxtFld = new JTextField();
+		fileKeyWordTxtFld.setEditable(false);
+		fileKeyWordTxtFld.setText(fileKeyword);
+		
+		fileKeyWordTxtFld.setPreferredSize(getPrefSizeSearch());
+		
+		JPanel pnlLinks = new JPanel(new GridBagLayout());
+		pnlLinks.setOpaque(false);
+		pnlLinks.add(linkSettingsList, new GridBagConstraints(0, 0, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
+		pnlLinks.add(linkModeKeyword, new GridBagConstraints(1, 0, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(0, 5, 0, 0), 0, 0));
+		
+		
+		pnlSearchList = new JPanel(new GridBagLayout());
+		pnlSearchList.setOpaque(false);
+		pnlSearchList.add(scrapButtonList, new GridBagConstraints(0, 0, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
+		pnlSearchList.add(fileKeyWordTxtFld, new GridBagConstraints(1, 0, 1, 1, 1, 0, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(0, 5, 0, 0), 0, 0));
+		pnlSearchList.add(pnlLinks, new GridBagConstraints(0, 1, 2, 1, 1, 0, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(0, 5, 0, 0), 0, 0));
+		
+	}
+
+	private void createPnlProgressBarList() {
+		JButton stopButtonList = new JButton(new ImageIcon(getClass().getResource("/icones/stop_icon_32.png")));
+		stopButtonList.setToolTipText("stop scraping");
+		stopButtonList.addActionListener(new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				try{
+					fireScrapingStopped();
+				}catch(Exception ex){
+					error(ex);
+				}
+			}
+
+		});
+		
+		progressBarList = new JProgressBar(0, 100);
+		progressBarList.setValue(0);
+		progressBarList.setStringPainted(true);
+		progressBarList.setPreferredSize(getPrefSizeSearch());
+
+
+		pnlProgressList = new JPanel(new GridBagLayout());
+		pnlProgressList.setOpaque(false);
+		pnlProgressList.setVisible(false);
+		pnlProgressList.add(stopButtonList, new GridBagConstraints(0, 0, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(5, 0, 0, 0), 0, 0));
+		pnlProgressList.add(progressBarList, new GridBagConstraints(1, 0, 1, 1, 1, 0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(5, 5, 0, 0), 0, 0));
+		
+	}
+
 	private JPanel getUiSettings() {
 		if(uiSettings == null){
-			linkModeKeywordSttgs = HyperlinkBuilder.buildLink(new JButton("keywords"));
+			JButton linkModeKeywordSttgs = HyperlinkBuilder.buildLink(new JButton("keywords"));
 			linkModeKeywordSttgs.addActionListener(new AbstractAction() {
 				public void actionPerformed(ActionEvent e) {
 					try{
@@ -309,7 +301,7 @@ public class VViadeoScraper implements MViadeoScraperListener {
 				}
 			});
 			
-			linkModeKeywordlistSttgs = HyperlinkBuilder.buildLink(new JButton("keywords-list"));
+			JButton linkModeKeywordlistSttgs = HyperlinkBuilder.buildLink(new JButton("keywords-list"));
 			linkModeKeywordlistSttgs.addActionListener(new AbstractAction() {
 				public void actionPerformed(ActionEvent e) {
 					try{

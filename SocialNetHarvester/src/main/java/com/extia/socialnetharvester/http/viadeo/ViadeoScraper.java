@@ -34,7 +34,7 @@ import com.extia.socialnetharvester.data.UrlConnectionWrapper;
 import com.extia.socialnetharvester.data.ViadeoPerson;
 import com.extia.socialnetharvester.http.viadeo.avancement.AvancementManager;
 import com.extia.socialnetharvester.io.FileIO;
-import com.extia.socialnetharvester.io.ScrappingHistoryXmlIO;
+import com.extia.socialnetharvester.io.ScrapingHistoryXmlIO;
 import com.extia.socialnetharvester.io.csv.CSVKeywordReportIO;
 import com.extia.socialnetharvester.io.csv.CSVPersonListIO;
 
@@ -47,8 +47,8 @@ public class ViadeoScraper {
 	@Resource(name="viadeoProperties")
 	private ViadeoProperties viadeoProperties;
 	
-	@Resource(name="scrappingHistoryXmlIO")
-	private ScrappingHistoryXmlIO scrappingHistoryXml;
+	@Resource(name="scrapingHistoryXmlIO")
+	private ScrapingHistoryXmlIO scrappingHistoryXml;
 	private ScrapingHistory history;
 	
 	@Resource(name="userSettings")
@@ -116,7 +116,7 @@ public class ViadeoScraper {
 		return scrapingProgressListenerList.remove(scrapingProgressListener);
 	}
 
-	private ScrappingHistoryXmlIO getScrappingHistoryXml() {
+	private ScrapingHistoryXmlIO getScrappingHistoryXml() {
 		return scrappingHistoryXml;
 	}
 	
@@ -179,7 +179,7 @@ public class ViadeoScraper {
 		return getViadeoProperties().getThemesDisjointsList();
 	}
 
-	public void setScrappingHistoryXml(ScrappingHistoryXmlIO scrappingHistoryXml) {
+	public void setScrappingHistoryXml(ScrapingHistoryXmlIO scrappingHistoryXml) {
 		this.scrappingHistoryXml = scrappingHistoryXml;
 	}
 
@@ -252,94 +252,26 @@ public class ViadeoScraper {
 			int indexKeywords = 0;
 			getDomBufferMap().clear();
 			getAvancementManager().clear();
+			
 			for (String keyWords : keyWordList) {
 				fireScrapingProgressUpdated(0);
 
 				if(isInterruptFlag()){
 					logger.info("interuption called. Stopping search for keywords (" + keyWordList.size() + ").");
 					break;
-				}else{
-					if(keyWords != null && !"".equals(keyWords) && urlsForKeywordsMap.get(keyWords) == null){
-						logger.info("searching urls for keywords '" + keyWords + "'");
-
-						fireScrapingKeyWordsStarted(keyWords);
-
-						fireScrapingProgressUpdated(Math.round(((float)indexKeywords / (float)keyWordList.size()) * 100));
-						
-						UrlConnectionWrapper viadeoConWra = new UrlConnectionWrapper();
-						viadeoConWra.setMethod(Method.GET);
-						viadeoConWra.setUrl(getViadeoProperties().getViadeoSearchUrl());
-						viadeoConWra.setUserAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6");
-						viadeoConWra.setReferer(getViadeoUrl());
-						viadeoConWra.setTimeout(getRequestTimeout());
-						viadeoConWra.addCookies(getCookies());
-						viadeoConWra.putPostParameter("ga_from", "Tfrom:search-members;Bfrom:default-form;Efrom:;");
-						viadeoConWra.putPostParameter("fullName", "");
-						viadeoConWra.putPostParameter("keywords", "\"" + keyWords + "\"");
-						viadeoConWra.putPostParameter("search", "Chercher");
-						viadeoConWra.putPostParameter("company", "");
-						viadeoConWra.putPostParameter("companyExactSearch", "on");
-						viadeoConWra.putPostParameter("position", "");
-						viadeoConWra.putPostParameter("positionExactSearch", "off");
-						viadeoConWra.putPostParameter("schoolName", "");
-						viadeoConWra.putPostParameter("sector", "on");
-						viadeoConWra.putPostParameter("town", "");
-						viadeoConWra.putPostParameter("countryForm", "");
-						viadeoConWra.putPostParameter("county", "");
-						viadeoConWra.putPostParameter("joinDateId", "0020");
-						viadeoConWra.putPostParameter("language", "");
-						viadeoConWra.putPostParameter("btnRadio", "0020");
-
-						ScrapingHistory scrapingHistory = getHistory();
-
-						List<UrlConnectionWrapper> urlConnexionToScrapList = getSearchUrlList(viadeoConWra);
-						if(urlConnexionToScrapList != null) {
-
-							int nbResultsRetrieved = 0;
-							for (UrlConnectionWrapper urlConWra : urlConnexionToScrapList) {
-								Document dom = getDomBufferMap().get(urlConWra);
-								Elements h1NbElementsResult = dom.select("div[class=searchResultsTitleWrapper pal] h1[class=fl mrs]");
-								int nbResultsSubConnec = getInteger(h1NbElementsResult.text());
-								nbResultsRetrieved += Math.min(nbResultsSubConnec, getMaximumScrapableResults());
-
-							}
-
-							Connection connection = viadeoConWra.getConnection(getCookies());
-							Document dom = connection.execute().parse();
-							Thread.sleep(getHttpCallsDelay());
-
-							Elements h1NbElements = dom.select("div[class=searchResultsTitleWrapper pal] h1[class=fl mrs]");
-							int nbResults = getInteger(h1NbElements.text());
-
-							logger.debug(nbResultsRetrieved + " results out of " + nbResults + " will be retrieved For keywords : '" + keyWords + "'");
-							getAvancementManager().add(keyWords, nbResultsRetrieved, 0);
-							
-							/*
-							 * TODO 
-							 * for each parent URL, add the last child URL for which scraping started.
-							 * for now, history will make the search start from the last keyword being searched.
-							 * It'd be better to start from the last page.
-							 */
-							for (Iterator<UrlConnectionWrapper> it = urlConnexionToScrapList.iterator(); it.hasNext();) {
-								UrlConnectionWrapper conWra = it.next();
-								int index = scrapingHistory.getSearchConnectionList().indexOf(conWra);
-
-								if (index > -1 && scrapingHistory.getSearchConnectionList().get(index).isScrapped()){
-									it.remove();
-								}else{
-									scrapingHistory.addSearchConnection(conWra);
-								}
-							}
-							getScrappingHistoryXml().saveHistory(scrapingHistory);
-							getcSVKeywordReportIO().writeLine(keyWords, "" + nbResultsRetrieved, "" + nbResults);
-
-							/*
-							 * before scraping, set total of people to scrap for this search to keep track of progress.
-							 */
-							urlsForKeywordsMap.put(keyWords, urlConnexionToScrapList);
-						}
-						indexKeywords++;
-					}
+				}
+				if(urlsForKeywordsMap.get(keyWords) == null){
+					fireScrapingKeyWordsStarted(keyWords);
+					fireScrapingProgressUpdated(Math.round(((float)indexKeywords / (float)keyWordList.size()) * 100));
+					
+					
+					
+					/*
+					 * before scraping, set total of people to scrap for this search to keep track of progress.
+					 */
+					urlsForKeywordsMap.put(keyWords, geturlConnexionToScrapList(keyWords));
+					
+					indexKeywords++;
 				}
 			}
 			fireScrapingProgressUpdated(100);
@@ -362,6 +294,86 @@ public class ViadeoScraper {
 		} 
 	}
 
+	private List<UrlConnectionWrapper> geturlConnexionToScrapList(String keyWords) throws InterruptedException, IOException, XPathExpressionException, ParserConfigurationException, SAXException, ParseException, TransformerException, ScraperException {
+		List<UrlConnectionWrapper> result = null;
+		if(keyWords != null && !"".equals(keyWords)){
+			logger.info("searching urls for keywords '" + keyWords + "'");
+
+			UrlConnectionWrapper viadeoConWra = createUrlWrapper(keyWords);
+			
+			result = getSearchUrlList(viadeoConWra);
+			if(result != null) {
+
+				int nbResultsRetrieved = 0;
+				for (UrlConnectionWrapper urlConWra : result) {
+					Document dom = getDomBufferMap().get(urlConWra);
+					Elements h1NbElementsResult = dom.select("div[class=searchResultsTitleWrapper pal] h1[class=fl mrs]");
+					int nbResultsSubConnec = getInteger(h1NbElementsResult.text());
+					nbResultsRetrieved += Math.min(nbResultsSubConnec, getMaximumScrapableResults());
+				}
+
+				Connection connection = viadeoConWra.getConnection(getCookies());
+				Document dom = connection.execute().parse();
+				Thread.sleep(getHttpCallsDelay());
+
+				Elements h1NbElements = dom.select("div[class=searchResultsTitleWrapper pal] h1[class=fl mrs]");
+				int nbResults = getInteger(h1NbElements.text());
+
+				logger.debug(nbResultsRetrieved + " results out of " + nbResults + " will be retrieved For keywords : '" + keyWords + "'");
+				getAvancementManager().add(keyWords, nbResultsRetrieved, 0);
+
+				/*
+				 * TODO 
+				 * for each parent URL, add the last child URL for which scraping started.
+				 * for now, history will make the search start from the last keyword being searched.
+				 * It'd be better to start from the last page.
+				 */
+				ScrapingHistory scrapingHistory = getHistory();
+				for (Iterator<UrlConnectionWrapper> it = result.iterator(); it.hasNext();) {
+					UrlConnectionWrapper conWra = it.next();
+					int index = scrapingHistory.getSearchConnectionList().indexOf(conWra);
+
+					if (index > -1 && scrapingHistory.getSearchConnectionList().get(index).isScrapped()){
+						it.remove();
+					}else{
+						scrapingHistory.addSearchConnection(conWra);
+					}
+				}
+				getScrappingHistoryXml().saveHistory(scrapingHistory);
+				getcSVKeywordReportIO().writeLine(keyWords, "" + nbResultsRetrieved, "" + nbResults);
+			}
+			
+		}
+		return result;
+	}
+
+	private UrlConnectionWrapper createUrlWrapper(String keyWords) {
+		UrlConnectionWrapper result = new UrlConnectionWrapper();
+			result.setMethod(Method.GET);
+			result.setUrl(getViadeoProperties().getViadeoSearchUrl());
+			result.setUserAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6");
+			result.setReferer(getViadeoUrl());
+			result.setTimeout(getRequestTimeout());
+			result.addCookies(getCookies());
+			result.putPostParameter("ga_from", "Tfrom:search-members;Bfrom:default-form;Efrom:;");
+			result.putPostParameter("fullName", "");
+			result.putPostParameter("keywords", "\"" + keyWords + "\"");
+			result.putPostParameter("search", "Chercher");
+			result.putPostParameter("company", "");
+			result.putPostParameter("companyExactSearch", "on");
+			result.putPostParameter("position", "");
+			result.putPostParameter("positionExactSearch", "off");
+			result.putPostParameter("schoolName", "");
+			result.putPostParameter("sector", "on");
+			result.putPostParameter("town", "");
+			result.putPostParameter("countryForm", "");
+			result.putPostParameter("county", "");
+			result.putPostParameter("joinDateId", "0020");
+			result.putPostParameter("language", "");
+			result.putPostParameter("btnRadio", "0020");
+			return result;
+	}
+
 	private String getKeyWords(UrlConnectionWrapper urlConWra) throws UnsupportedEncodingException{
 		String result = null;
 		if(urlConWra != null){
@@ -378,85 +390,82 @@ public class ViadeoScraper {
 		return result;
 	}
 
-	private List<UrlConnectionWrapper> getSearchUrlList(UrlConnectionWrapper viadeoConWra) throws InterruptedException, IOException {
+	
+	/**
+	 * Returns the optimal list of search pages to browse to get the maximum number of results out of the search page given as parameter.
+	 * 
+	 * @param baseSearchPage : the search page
+	 * @return 
+	 * @throws InterruptedException
+	 * @throws IOException
+	 */
+	private List<UrlConnectionWrapper> getSearchUrlList(UrlConnectionWrapper baseSearchPage) throws InterruptedException, IOException {
 		List<UrlConnectionWrapper> result = new ArrayList<UrlConnectionWrapper>();
-		if(viadeoConWra != null){
-			if(isInterruptFlag()){
-				logger.info("interuption called. Stopping URL optimization.");
-			}else{
-				Document dom = viadeoConWra.getConnection(getCookies()).execute().parse();
-				Thread.sleep(getHttpCallsDelay());
+		if(baseSearchPage != null){
+			Document dom = baseSearchPage.getConnection(getCookies()).execute().parse();
+			Thread.sleep(getHttpCallsDelay());
 
-				Elements h1NbElements = dom.select("div[class=searchResultsTitleWrapper pal] h1[class=fl mrs]");
+			Elements h1NbElements = dom.select("div[class=searchResultsTitleWrapper pal] h1[class=fl mrs]");
 
-				int nbResults = getInteger(h1NbElements.text());
+			int nbResults = getInteger(h1NbElements.text());
 
-				List<String> themeDisjointsList = getThemesDisjointsList();
+			logger.debug("found " + nbResults + " results.");
 
-				logger.debug("found " + nbResults + " results.");
+			if(nbResults > 0){
+				String splitTheme = null;
+				if(nbResults > getMaximumScrapableResults()){
+					Elements divFacetList = dom.select("div[class=facet phm pvs]");
+					logger.debug("divFacetList : " + divFacetList.size());
 
-				boolean addUrl = false;
+					splitTheme = getSplitSearchTheme(divFacetList);
 
-				if(nbResults > 0){
-					if(nbResults > getMaximumScrapableResults()){
-						Elements divFacetList = dom.select("div[class=facet phm pvs]");
-						logger.debug("divFacetList : " + divFacetList.size());
+					logger.debug("Thème retenu pour " + nbResults + " : " + splitTheme);
 
-						String themeRetenu = null;
-						int maxResultTheme = 0;
-						for (Iterator<Element> divFacetIterator = divFacetList.iterator(); divFacetIterator.hasNext();) {
-							Element divFacet = ((Element) divFacetIterator.next()).parent();
-							String theme = divFacet.select("p[class^=facet-title open mbxs phm pvs]").text();
+					
+					List<String> hrefList = getHrefList(divFacetList, splitTheme);
+					if(hrefList != null){
+						for (String href : hrefList) {
+							UrlConnectionWrapper subViadeoConWra = new UrlConnectionWrapper();
+							subViadeoConWra.setMethod(Method.GET);
+							subViadeoConWra.setUrl(href);
+							subViadeoConWra.setTimeout(getRequestTimeout());
+							subViadeoConWra.addCookies(getCookies());
+							subViadeoConWra.setUserAgent(getUserAgent());
+							subViadeoConWra.setReferer(getViadeoUrl());
 
-							if(themeDisjointsList.contains(theme)){
-								Elements liList = divFacet.select("ul > li");
-								int resultNumber = 0;
-								for (Iterator<Element> liIterator = liList.iterator(); liIterator.hasNext();) {
-									Element liElement = (Element) liIterator.next();
-									resultNumber += getInteger(liElement.select("small[class=number phxs]").text());
-								}
-								if(resultNumber > maxResultTheme && resultNumber > getMaximumScrapableResults()){
-									maxResultTheme = resultNumber;
-									themeRetenu = theme;
-								}
-							}
+							result.addAll(getSearchUrlList(subViadeoConWra));
 						}
-						logger.debug("Thème retenu pour " + nbResults + " : " + themeRetenu);
-						if(themeRetenu != null){
-							for (Iterator<Element> divFacetIterator = divFacetList.iterator(); divFacetIterator.hasNext();) {
-								Element divFacet = ((Element) divFacetIterator.next()).parent();
-								String themeLabel = divFacet.select("p[class^=facet-title open mbxs phm pvs]").text();
-
-								if(themeRetenu.equals(themeLabel)){
-									Elements liList = divFacet.select("ul > li");
-									for (Iterator<Element> liIterator = liList.iterator(); liIterator.hasNext();) {
-										Element liElement = (Element) liIterator.next();
-										String href = liElement.select("a").attr("abs:href");
-
-										if(href != null && !"".equals(href)){
-											UrlConnectionWrapper subViadeoConWra = new UrlConnectionWrapper();
-											subViadeoConWra.setMethod(Method.GET);
-											subViadeoConWra.setUrl(href);
-											subViadeoConWra.setTimeout(getRequestTimeout());
-											subViadeoConWra.addCookies(getCookies());
-											subViadeoConWra.setUserAgent(getUserAgent());
-											subViadeoConWra.setReferer(getViadeoUrl());
-
-											result.addAll(getSearchUrlList(subViadeoConWra));
-										}
-									}
-								}
-							}
-						}else{
-							addUrl = true;
-						}
-					}else{
-						addUrl = true;
 					}
+					
+				}
 
-					if(addUrl){
-						getDomBufferMap().put(viadeoConWra, dom);
-						result.add(viadeoConWra);
+				if(splitTheme == null || nbResults <= getMaximumScrapableResults()){
+					getDomBufferMap().put(baseSearchPage, dom);
+					result.add(baseSearchPage);
+				}
+			}
+		}
+		return result;
+	}
+
+
+	private List<String> getHrefList(Elements divFacetList, String themeRetenu) {
+		List<String> result = null;
+		if(themeRetenu != null && divFacetList != null){
+			result = new ArrayList<String>();
+			for (Iterator<Element> divFacetIterator = divFacetList.iterator(); divFacetIterator.hasNext();) {
+				Element divFacet = ((Element) divFacetIterator.next()).parent();
+				String themeLabel = divFacet.select("p[class^=facet-title open mbxs phm pvs]").text();
+
+				if(themeRetenu.equals(themeLabel)){
+					Elements liList = divFacet.select("ul > li");
+					for (Iterator<Element> liIterator = liList.iterator(); liIterator.hasNext();) {
+						Element liElement = (Element) liIterator.next();
+						String href = liElement.select("a").attr("abs:href");
+						if(href != null && !"".equals(href)){
+							result.add(href);
+						}
+
 					}
 				}
 			}
@@ -464,6 +473,31 @@ public class ViadeoScraper {
 		return result;
 	}
 
+	private String getSplitSearchTheme(Elements divFacetList) {
+		String themeRetenu = null;
+		if(divFacetList != null){
+			int maxResultTheme = 0;
+			List<String> themeDisjointsList = getThemesDisjointsList();
+			for (Iterator<Element> divFacetIterator = divFacetList.iterator(); divFacetIterator.hasNext();) {
+				Element divFacet = ((Element) divFacetIterator.next()).parent();
+				String theme = divFacet.select("p[class^=facet-title open mbxs phm pvs]").text();
+
+				if(themeDisjointsList.contains(theme)){
+					Elements liList = divFacet.select("ul > li");
+					int resultNumber = 0;
+					for (Iterator<Element> liIterator = liList.iterator(); liIterator.hasNext();) {
+						Element liElement = (Element) liIterator.next();
+						resultNumber += getInteger(liElement.select("small[class=number phxs]").text());
+					}
+					if(resultNumber > maxResultTheme && resultNumber > getMaximumScrapableResults()){
+						maxResultTheme = resultNumber;
+						themeRetenu = theme;
+					}
+				}
+			}
+		}
+		return themeRetenu;
+	}
 
 	private int getInteger(String text) {
 		int result = 0;
@@ -487,86 +521,95 @@ public class ViadeoScraper {
 				if(isInterruptFlag()){
 					logger.info("interuption called, stopping list scrapping for URL list.");
 					break;
-				}else {
-
-					UrlConnectionWrapper urlConWra = searchUrlConWra;
-					String keyWords = getKeyWords(searchUrlConWra);
-					do{
-						Thread.sleep(getHttpCallsDelay());
-
-						if(isInterruptFlag()){
-							logger.info("interuption called. Stopping scrapping for keyWords " + keyWords + ".");
-							break;
-						}else{
-							Response res = null;
-
-							Connection con = urlConWra.getConnection(getCookies());
-
-							if(getScrappingSettings().isAutoResumeScraping()){
-								while(res == null){
-									try{
-										res = con.execute();
-									}catch(Exception ex){
-										//TODO : traiter différemment HTTP STATUS 401
-										logger.error(ex.getMessage());
-									}
-									if(res == null){
-										Thread.sleep(getHttpCallsDelay());
-									}
-								}
-							}else{
-								res = con.execute();
-							}
-
-
-							Document dom = res.parse();
-
-							List<ViadeoPerson> personList = getPersonList(dom, keyWords);
-
-							int nbScrapedPerson = 0;
-							for (ViadeoPerson person : personList) {
-								if(!resultFileContains(person)){
-									getNameSet().add(person.getName());
-									getcSVWriterResult().writeLine(person);
-									logger.debug("scrapping datas for " + person);
-									nbScrapedPerson ++;
-								}
-							}
-							
-							
-							getAvancementManager().incrementScrappedNumber(keyWords, nbScrapedPerson);
-							
-							fireScrapingProgressUpdated(getAvancementManager().getProgressPercent());
-							
-							if(urlConWra != searchUrlConWra){
-								urlConWra.setScrapped(true);
-							}
-
-							Elements buttonNext = dom.select("p[class=numerotation] > a[class=nextPage]");
-
-							String href = buttonNext.attr("abs:href");
-							if(href != null && !"".equals(href)){
-								urlConWra = new UrlConnectionWrapper();
-								urlConWra.setMethod(Method.GET);
-								urlConWra.setUrl(href);
-								urlConWra.setTimeout(getRequestTimeout());
-								urlConWra.setUserAgent(getUserAgent());
-								urlConWra.setReferer(getViadeoUrl());
-
-								getHistory().addSearchConnection(urlConWra);
-
-								getScrappingHistoryXml().saveHistory(getHistory());
-							}else{
-								urlConWra = null;
-								searchUrlConWra.setScrapped(true);
-							}
-						}
-					}while(urlConWra != null);
+				}else{
+					scrapSearchPage(searchUrlConWra);
 				}
 			}
 		}
 	}
+	
+	private void scrapSearchPage(UrlConnectionWrapper searchUrlConWra) throws InterruptedException, IOException, ScraperException, XPathExpressionException, ParserConfigurationException, SAXException, ParseException, TransformerException{
+		if(searchUrlConWra != null){
+			UrlConnectionWrapper urlConWra = searchUrlConWra;
+			String keyWords = getKeyWords(searchUrlConWra);
+			do{
+				Thread.sleep(getHttpCallsDelay());
 
+				if(isInterruptFlag()){
+					logger.info("interuption called. Stopping scrapping for keyWords " + keyWords + ".");
+					break;
+				}else{
+					Response res = getResponse(urlConWra, getScrappingSettings().isAutoResumeScraping());
+					Document dom = res.parse();
+
+					List<ViadeoPerson> personList = getPersonList(dom, keyWords);
+
+					int nbScrapedPerson = 0;
+					for (ViadeoPerson person : personList) {
+						if(!resultFileContains(person)){
+							getNameSet().add(person.getName());
+							getcSVWriterResult().writeLine(person);
+							logger.debug("scrapping datas for " + person);
+							nbScrapedPerson ++;
+						}
+					}
+
+
+					getAvancementManager().incrementScrappedNumber(keyWords, nbScrapedPerson);
+
+					fireScrapingProgressUpdated(getAvancementManager().getProgressPercent());
+
+					if(!urlConWra.equals(searchUrlConWra)){
+						urlConWra.setScrapped(true);
+					}
+
+					Elements buttonNext = dom.select("p[class=numerotation] > a[class=nextPage]");
+
+					String href = buttonNext.attr("abs:href");
+					if(href != null && !"".equals(href)){
+						urlConWra = new UrlConnectionWrapper();
+						urlConWra.setMethod(Method.GET);
+						urlConWra.setUrl(href);
+						urlConWra.setTimeout(getRequestTimeout());
+						urlConWra.setUserAgent(getUserAgent());
+						urlConWra.setReferer(getViadeoUrl());
+
+						getHistory().addSearchConnection(urlConWra);
+
+						getScrappingHistoryXml().saveHistory(getHistory());
+					}else{
+						urlConWra = null;
+						searchUrlConWra.setScrapped(true);
+					}
+				}
+			}while(urlConWra != null);
+		}
+	}
+
+
+	private Response getResponse(UrlConnectionWrapper urlConWra, boolean resumeIfFail) throws InterruptedException, IOException {
+		Response result = null;
+		if(urlConWra != null){
+			Connection con = urlConWra.getConnection(getCookies());
+
+			if(resumeIfFail){
+				while(result == null){
+					try{
+						result = con.execute();
+					}catch(Exception ex){
+						//TODO : traiter différemment HTTP STATUS 401
+						logger.error(ex.getMessage());
+					}
+					if(result == null){
+						Thread.sleep(getHttpCallsDelay());
+					}
+				}
+			}else{
+				result = con.execute();
+			}
+		}
+		return result;
+	}
 
 	private long getHttpCallsDelay() {
 		return getScrappingSettings().getHttpCallsDelay();
