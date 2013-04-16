@@ -30,7 +30,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import com.extia.socialnetharvester.ScraperException;
-import com.extia.socialnetharvester.data.ScrappingHistory;
+import com.extia.socialnetharvester.data.ScrapingHistory;
 import com.extia.socialnetharvester.data.UrlConnectionWrapper;
 import com.extia.socialnetharvester.http.viadeo.ScraperSystemFilesFactory;
 import com.extia.socialnetharvester.http.viadeo.ViadeoUserSettings;
@@ -48,13 +48,13 @@ public class ScrappingHistoryXmlIO {
 		this.systemFilesFactory = systemFilesFactory;
 	}
 
-	private ScrappingHistory getViadeoConnectionWrapper(Document document) throws ParserConfigurationException, XPathExpressionException, ParseException {
-		ScrappingHistory result = null;
+	private ScrapingHistory getViadeoConnectionWrapper(Document document) throws ParserConfigurationException, XPathExpressionException, ParseException {
+		ScrapingHistory result = null;
 
 		Node rootEle = getFirstElementByTagName(document, "ScrappingHistory");
 		if(rootEle != null){
 			
-			result = new ScrappingHistory();
+			result = new ScrapingHistory();
 			result.setDate(getDateFormat().parse(getAttributeValue((Element)rootEle, "date")));
 			
 			NodeList searchConnectionNodeList = getNodeList(document, "//ScrappingHistory/ViadeoSearch");
@@ -131,7 +131,7 @@ public class ScrappingHistoryXmlIO {
 		return new SimpleDateFormat("yyyy-MM-dd");
 	}
 
-	private Document getXmlDocument(ScrappingHistory scrappingHistory) throws ParserConfigurationException {
+	private Document getXmlDocument(ScrapingHistory scrappingHistory) throws ParserConfigurationException {
 		Document result = null;
 		if(scrappingHistory != null){
 			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
@@ -201,8 +201,8 @@ public class ScrappingHistoryXmlIO {
 		return "History_" + getDateFormat().format(new Date())+".xml";
 	}
 	
-	public ScrappingHistory readScrappingHistory() throws ParserConfigurationException, SAXException, IOException, XPathExpressionException, ParseException, ScraperException {
-		ScrappingHistory result = null;
+	public ScrapingHistory readScrappingHistory() throws ParserConfigurationException, SAXException, IOException, XPathExpressionException, ParseException, ScraperException {
+		ScrapingHistory result = null;
 		File historyFile = getHistoryFile();
 		if(historyFile.exists()){
 
@@ -217,7 +217,7 @@ public class ScrappingHistoryXmlIO {
 		return result;
 	}
 	
-	public boolean saveHistory(ScrappingHistory scrappingHistory) throws TransformerException, ParserConfigurationException, ScraperException{
+	public boolean saveHistory(ScrapingHistory scrappingHistory) throws TransformerException, ParserConfigurationException, ScraperException{
 		boolean result = false;
 		Document document = getXmlDocument(scrappingHistory);
 		File historyFile = getHistoryFile();
@@ -269,7 +269,7 @@ public class ScrappingHistoryXmlIO {
 			viadeoConWra2.putPostParameter("password", "extiapaca");
 			viadeoConWra2.setMethod(Method.POST);
 			
-			ScrappingHistory scrappingHistory = new ScrappingHistory();
+			ScrapingHistory scrappingHistory = new ScrapingHistory();
 			scrappingHistory.setDate(new Date());
 			scrappingHistory.addSearchConnection(viadeoConWra);
 			scrappingHistory.addSearchConnection(viadeoConWra2);
@@ -284,7 +284,7 @@ public class ScrappingHistoryXmlIO {
 			xmlHistory.saveHistory(scrappingHistory);
 			
 
-			ScrappingHistory scrappingHistory2 = xmlHistory.readScrappingHistory();
+			ScrapingHistory scrappingHistory2 = xmlHistory.readScrappingHistory();
 			
 			System.out.println(scrappingHistory.getSearchConnectionList().equals(scrappingHistory2.getSearchConnectionList()));
 		}catch(Exception ex){

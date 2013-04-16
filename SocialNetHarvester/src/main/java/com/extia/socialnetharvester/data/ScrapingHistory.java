@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class ScrappingHistory{
+public class ScrapingHistory{
 	
 	private List<UrlConnectionWrapper> searchConnectionList;
 	private Date date;
 	
-	public ScrappingHistory(){
+	public ScrapingHistory(){
 		searchConnectionList = new ArrayList<UrlConnectionWrapper>();
 	}
 	
@@ -43,23 +43,30 @@ public class ScrappingHistory{
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj){
 			return true;
-		if (obj == null)
+		}
+		if (obj == null){
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()){
 			return false;
-		ScrappingHistory other = (ScrappingHistory) obj;
+		}
+		ScrapingHistory other = (ScrapingHistory) obj;
 		if (date == null) {
-			if (other.date != null)
+			if (other.date != null){
 				return false;
-		} else if (!date.equals(other.date))
+			}
+		} else if (!date.equals(other.date)){
 			return false;
+		}
 		if (searchConnectionList == null) {
-			if (other.searchConnectionList != null)
+			if (other.searchConnectionList != null){
 				return false;
-		} else if (!searchConnectionList.equals(other.searchConnectionList))
+			}
+		} else if (!searchConnectionList.equals(other.searchConnectionList)){
 			return false;
+		}
 		return true;
 	}
 

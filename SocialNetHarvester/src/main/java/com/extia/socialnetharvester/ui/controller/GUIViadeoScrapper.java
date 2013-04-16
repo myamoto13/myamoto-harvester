@@ -36,11 +36,8 @@ public class GUIViadeoScrapper implements VViadeoScraperListener {
 	public void init(){
 		vue.addVueListener(this);
 		modele.addModeleListener(vue);
-	}
-
-	public void setGuiSettings(GUIViadeoScrappingSettings guiSettings) {
-		vue.setUiSettings(guiSettings.getUI());
-		this.guiSettings = guiSettings;
+		
+		vue.setPnlSettings(guiSettings.getUI());
 	}
 
 	private MViadeoScraper getModele() {
@@ -67,7 +64,7 @@ public class GUIViadeoScrapper implements VViadeoScraperListener {
 		getScrapTask().cancelScraping();
 	}
 
-	public void fireEnterSettings() throws Exception {
+	public void fireEnterSettings() throws IOException {
 		getModele().showSettings();
 	}
 
@@ -79,13 +76,13 @@ public class GUIViadeoScrapper implements VViadeoScraperListener {
 		}
 		//Instances of javax.swing.SwingWorker are not reusuable
 		getModele().updateScrapProgress(0);
-		ScrapTask scrapTask = new ScrapTask();
-		setScrapTask(scrapTask);
-		scrapTask.setViadeoScraper(getModele().getViadeoScrapper());
-		scrapTask.setKeyWordsList(Arrays.asList(new String[]{keywords}));
-		scrapTask.addPropertyChangeListener(getKeywordsSearchTaskPListener());
-		scrapTask.addScrapTaskListener(getKeywordsSearchTaskListener());
-		scrapTask.execute();
+		ScrapTask scrapTsk = new ScrapTask();
+		setScrapTask(scrapTsk);
+		scrapTsk.setViadeoScraper(getModele().getViadeoScrapper());
+		scrapTsk.setKeyWordsList(Arrays.asList(new String[]{keywords}));
+		scrapTsk.addPropertyChangeListener(getKeywordsSearchTaskPListener());
+		scrapTsk.addScrapTaskListener(getKeywordsSearchTaskListener());
+		scrapTsk.execute();
 	}
 	
 	private ScrapTaskListener getKeywordsSearchTaskListener(){
@@ -114,7 +111,7 @@ public class GUIViadeoScrapper implements VViadeoScraperListener {
 		if(keywordsSearchTaskPListener == null){
 			keywordsSearchTaskPListener = new PropertyChangeListener() {
 				public void propertyChange(PropertyChangeEvent evt) {
-					if ("progress" == evt.getPropertyName()) {
+					if ("progress".equals(evt.getPropertyName())) {
 						int progress = (Integer) evt.getNewValue();
 						getModele().updateScrapProgress(progress);
 					}
@@ -132,15 +129,15 @@ public class GUIViadeoScrapper implements VViadeoScraperListener {
 			getScrapTask().removeScrapTaskListener(getKeywordsListSearchTaskListener());
 		}
 		getModele().updateScrapListProgress(0);
-		ScrapTask scrapTask = new ScrapTask();
-		setScrapTask(scrapTask);
-		scrapTask.setViadeoScraper(getModele().getViadeoScrapper());
-		scrapTask.setKeyWordsList(getModele().getKeyWordList());
-		scrapTask.addPropertyChangeListener(getKeywordsListSearchTaskPListener());
+		ScrapTask scrapTsk = new ScrapTask();
+		setScrapTask(scrapTsk);
+		scrapTsk.setViadeoScraper(getModele().getViadeoScrapper());
+		scrapTsk.setKeyWordsList(getModele().getKeyWordList());
+		scrapTsk.addPropertyChangeListener(getKeywordsListSearchTaskPListener());
 
-		scrapTask.addScrapTaskListener(getKeywordsListSearchTaskListener());
+		scrapTsk.addScrapTaskListener(getKeywordsListSearchTaskListener());
 
-		scrapTask.execute();
+		scrapTsk.execute();
 	}
 	
 	private ScrapTaskListener getKeywordsListSearchTaskListener(){
@@ -172,7 +169,7 @@ public class GUIViadeoScrapper implements VViadeoScraperListener {
 		if(keywordsListSearchTaskPListener == null){
 			keywordsListSearchTaskPListener = new PropertyChangeListener() {
 				public void propertyChange(PropertyChangeEvent evt) {
-					if ("progress" == evt.getPropertyName()) {
+					if ("progress".equals(evt.getPropertyName())) {
 						int progress = (Integer) evt.getNewValue();
 						getModele().updateScrapListProgress(progress);
 					}

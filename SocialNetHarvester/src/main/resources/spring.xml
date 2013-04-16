@@ -11,12 +11,15 @@
 	<bean class="com.extia.socialnetharvester.GUIViadeoScrapperLauncher" id="guiLauncher" name="guiLauncher" />
 	
 	<bean class="com.extia.socialnetharvester.ui.controller.GUIViadeoScrapper" id="guiScraper" name="guiScraper" init-method="init"/>
-	
-	<bean class="com.extia.socialnetharvester.ui.controller.GUIViadeoScrappingSettings" id="guiSettings" name="guiSettings" />
+	<bean class="com.extia.socialnetharvester.ui.controller.GUIViadeoScrappingSettings" id="guiSettings" name="guiSettings" init-method="init" />
 
 	<bean class="com.extia.socialnetharvester.ui.view.VViadeoScraper" id="vViadeoScraper" name="vViadeoScraper" />
+	<bean class="com.extia.socialnetharvester.ui.view.VViadeoScrapingSettings" id="vViadeoScrapingSettings" name="vViadeoScrapingSettings" />
 	
 	<bean class="com.extia.socialnetharvester.ui.model.MViadeoScraper" id="mViadeoScraper" name="mViadeoScraper" />
+	<bean class="com.extia.socialnetharvester.ui.model.MViadeoScrapingSettings" id="mViadeoScrapingSettings" name="mViadeoScrapingSettings" />
+	
+	
 	
 	<bean class="com.extia.socialnetharvester.http.viadeo.ViadeoScraper" id="viadeoScraper" name="viadeoScraper" />
 	<bean class="com.extia.socialnetharvester.http.viadeo.ScraperSystemFilesFactory" id="systemFilesFactory" name="systemFilesFactory" />

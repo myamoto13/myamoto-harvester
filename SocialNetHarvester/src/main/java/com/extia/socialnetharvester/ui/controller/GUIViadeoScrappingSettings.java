@@ -1,5 +1,6 @@
 package com.extia.socialnetharvester.ui.controller;
 
+import javax.annotation.Resource;
 import javax.swing.JPanel;
 
 import com.extia.socialnetharvester.ui.model.MViadeoScrapingSettings;
@@ -10,32 +11,23 @@ import com.extia.socialnetharvester.ui.view.VViadeoScrapingSettings.VViadeoScrap
 
 public class GUIViadeoScrappingSettings implements VViadeoScrapingSettingsListener{
 	
+	@Resource(name="mViadeoScrapingSettings")
 	private MViadeoScrapingSettings modele;
+	
+	@Resource(name="vViadeoScrapingSettings")
 	private VViadeoScrapingSettings vue;
 	
-	public GUIViadeoScrappingSettings() {
-		
-		MViadeoScrapingSettings modele = new MViadeoScrapingSettings();
-		VViadeoScrapingSettings vue = new VViadeoScrapingSettings();
-		
-		setModele(modele);
-		
-		setVue(vue);
+	public void init(){
 		vue.addVueListener(this);
-		
+
 		modele.addModeleListener(vue);
-		vue.setModele(modele);
 	}
 	
 	public JPanel getUI(){
 		return getVue().getUi();
 	}
 	
-	private MViadeoScrapingSettings getModele() {
-		return modele;
-	}
-
-	private void setModele(MViadeoScrapingSettings modele) {
+	public void setModele(MViadeoScrapingSettings modele) {
 		this.modele = modele;
 	}
 
@@ -43,7 +35,7 @@ public class GUIViadeoScrappingSettings implements VViadeoScrapingSettingsListen
 		return vue;
 	}
 
-	private void setVue(VViadeoScrapingSettings vue) {
+	public void setVue(VViadeoScrapingSettings vue) {
 		this.vue = vue;
 	}
 }

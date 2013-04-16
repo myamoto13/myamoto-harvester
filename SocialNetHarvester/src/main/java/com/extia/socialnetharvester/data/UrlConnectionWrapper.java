@@ -3,6 +3,8 @@ package com.extia.socialnetharvester.data;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.Generated;
+
 import org.jsoup.Connection;
 import org.jsoup.Connection.Method;
 import org.jsoup.Jsoup;
@@ -104,6 +106,8 @@ public class UrlConnectionWrapper implements Comparable<UrlConnectionWrapper> {
 		return result;
 	}
 
+	
+	//SONAR-EXCLUDE-FIRST
 	@Override
 	public String toString() {
 		return "ViadeoConnectionWrapper [url=" + url + ", userAgent="
@@ -111,7 +115,9 @@ public class UrlConnectionWrapper implements Comparable<UrlConnectionWrapper> {
 				+ ", cookies=" + cookies + ", postParameterMap="
 				+ postParameterMap + ", method=" + method + "]";
 	}
+	//SONAR-EXCLUDE-LAST
 	
+	//SONAR-EXCLUDE-FIRST
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -126,41 +132,56 @@ public class UrlConnectionWrapper implements Comparable<UrlConnectionWrapper> {
 				+ ((userAgent == null) ? 0 : userAgent.hashCode());
 		return result;
 	}
-
+	//SONAR-EXCLUDE-LAST
+	
+	//SONAR-EXCLUDE-FIRST
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj){
 			return true;
-		if (obj == null)
+		}
+		if (obj == null){
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()){
 			return false;
+		}
 		UrlConnectionWrapper other = (UrlConnectionWrapper) obj;
-		if (method != other.method)
+		if (method != other.method){
 			return false;
+		}
 		if (postParameterMap == null) {
-			if (other.postParameterMap != null)
+			if (other.postParameterMap != null){
 				return false;
-		} else if (!postParameterMap.equals(other.postParameterMap))
+			}
+		} else if (!postParameterMap.equals(other.postParameterMap)){
 			return false;
+		}
 		if (referer == null) {
-			if (other.referer != null)
+			if (other.referer != null){
 				return false;
-		} else if (!referer.equals(other.referer))
+			}
+		} else if (!referer.equals(other.referer)){
 			return false;
+		}
 		if (url == null) {
-			if (other.url != null)
+			if (other.url != null){
 				return false;
-		} else if (!url.equals(other.url))
+			}
+		} else if (!url.equals(other.url)){
 			return false;
+		}
 		if (userAgent == null) {
-			if (other.userAgent != null)
+			if (other.userAgent != null){
 				return false;
-		} else if (!userAgent.equals(other.userAgent))
+			}
+		} else if (!userAgent.equals(other.userAgent)){
 			return false;
+		}
 		return true;
 	}
-
+	//SONAR-EXCLUDE-LAST
+	
 	public int compareTo(UrlConnectionWrapper o) {
 		int result = 0;
 		if(getUrl() != null){
