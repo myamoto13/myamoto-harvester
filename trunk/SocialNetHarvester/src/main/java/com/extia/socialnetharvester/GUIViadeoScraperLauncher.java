@@ -24,7 +24,6 @@ import org.springframework.context.support.GenericApplicationContext;
 
 import com.extia.socialnetharvester.http.viadeo.ScraperSystemFilesFactory;
 import com.extia.socialnetharvester.http.viadeo.ViadeoUserSettings;
-import com.extia.socialnetharvester.io.FileIO;
 import com.extia.socialnetharvester.io.ViadeoUserSettingsIO;
 import com.extia.socialnetharvester.io.csv.CSVFileIO;
 import com.extia.socialnetharvester.ui.controller.GUIViadeoScrapper;
@@ -129,9 +128,6 @@ public class GUIViadeoScraperLauncher {
 			
 			CSVFileIO csvIOResult = context.getBean("cSVFileWriterResult", CSVFileIO.class);
 			csvIOResult.setFile(systemFilesFactory.getResultFile());
-			
-			FileIO keywordListFileIO = context.getBean("keywordListFileIO", FileIO.class);
-			keywordListFileIO.setFilePath(userSettings.getKeyWordListFilePath());
 			
 			GUIViadeoScraperLauncher launcher = context.getBean("guiLauncher", GUIViadeoScraperLauncher.class);
 			launcher.launch(configFilePath);

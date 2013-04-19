@@ -17,8 +17,8 @@ public class ViadeoProperties {
 	}
 
 	public List<String> getThemesDisjointsList() {
-		/**thèmes non disjoints : Secteur ("Conseil", "High-tech" ...), Mots-clés ("Oracle", "Informatique"), Langue du profil**/
-		return Arrays.asList(new String[]{"Région", "Ville", "Fonction"});
+		/**thÃ¨mes non disjoints : Secteur ("Conseil", "High-tech" ...), Mots-clÃ©s ("Oracle", "Informatique"), Langue du profil**/
+		return Arrays.asList(new String[]{"RÃ©gion", "Ville", "Fonction"});
 	}
 	
 	public int getMaximumSearchResults(){

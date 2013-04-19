@@ -3,6 +3,9 @@ package com.extia.socialnetharvester.http.viadeo;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -33,7 +36,6 @@ import com.extia.socialnetharvester.data.ScrapingHistory;
 import com.extia.socialnetharvester.data.UrlConnectionWrapper;
 import com.extia.socialnetharvester.data.ViadeoPerson;
 import com.extia.socialnetharvester.http.viadeo.avancement.AvancementManager;
-import com.extia.socialnetharvester.io.FileIO;
 import com.extia.socialnetharvester.io.ScrapingHistoryXmlIO;
 import com.extia.socialnetharvester.io.csv.CSVKeywordReportIO;
 import com.extia.socialnetharvester.io.csv.CSVPersonListIO;
@@ -60,9 +62,6 @@ public class ViadeoScraper {
 	@Resource(name="systemFilesFactory")
 	private ScraperSystemFilesFactory systemFilesFactory;
 	
-	@Resource(name="keywordListFileIO")
-	private FileIO keywordListFileIO;
-
 	@Resource(name="cSVKeywordReportIO")
 	private CSVKeywordReportIO cSVKeywordReportIO;
 	
@@ -82,14 +81,6 @@ public class ViadeoScraper {
 
 	public ViadeoScraper() {
 		scrapingProgressListenerList = new ArrayList<ViadeoScraper.ScrapingProgressListener>();
-	}
-	
-	private FileIO getKeywordListFileIO() {
-		return keywordListFileIO;
-	}
-
-	public void setKeywordListFileIO(FileIO keywordListFileIO) {
-		this.keywordListFileIO = keywordListFileIO;
 	}
 	
 	private CSVKeywordReportIO getcSVKeywordReportIO() {
@@ -238,7 +229,8 @@ public class ViadeoScraper {
 	}
 
 	public List<String> getKeyWordList() throws IOException {
-		return getKeywordListFileIO().read();
+		String filePath = getScrappingSettings().getKeyWordListFilePath();
+		return filePath != null ? Files.readAllLines(Paths.get(filePath), StandardCharsets.UTF_8) : null;
 	}
 
 	public void scrapDatas(List<String> keyWordList) throws IOException, XPathExpressionException, ParserConfigurationException, SAXException, ParseException, TransformerException, ScraperException, InterruptedException {
