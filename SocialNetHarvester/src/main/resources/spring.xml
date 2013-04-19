@@ -23,7 +23,6 @@
 	<bean class="com.extia.socialnetharvester.http.viadeo.ScraperSystemFilesFactory" id="systemFilesFactory" name="systemFilesFactory" />
 	<bean class="com.extia.socialnetharvester.http.viadeo.ViadeoProperties" id="viadeoProperties" name="viadeoProperties" />
 	
-	<bean class="com.extia.socialnetharvester.io.FileIO" id="keywordListFileIO" name="keywordListFileIO" />
 	<bean class="com.extia.socialnetharvester.io.ScrapingHistoryXmlIO" id="scrapingHistoryXmlIO" name="scrapingHistoryXmlIO" /> 
 	<bean class="com.extia.socialnetharvester.io.ViadeoUserSettingsIO" id="settingsIO" name="settingsIO" />
 	<bean class="com.extia.socialnetharvester.io.csv.CSVFileIO" id="cSVFileWriterResult" name="cSVFileWriterResult" />
