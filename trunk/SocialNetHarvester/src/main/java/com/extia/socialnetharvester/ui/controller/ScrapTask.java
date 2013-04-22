@@ -5,8 +5,8 @@ import java.util.List;
 
 import javax.swing.SwingWorker;
 
-import com.extia.socialnetharvester.http.viadeo.ViadeoScraper;
-import com.extia.socialnetharvester.http.viadeo.ViadeoScraper.ScrapingProgressListener;
+import com.extia.socialnetharvester.business.ViadeoScraper;
+import com.extia.socialnetharvester.business.ViadeoScraper.ScrapingProgressListener;
 
 public class ScrapTask extends SwingWorker<Void, Void> {
     private List<String> keyWordsList;

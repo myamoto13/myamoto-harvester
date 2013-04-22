@@ -1,4 +1,4 @@
-package com.extia.socialnetharvester;
+package com.extia.socialnetharvester.business;
 
 public class ScraperException extends Exception{
 

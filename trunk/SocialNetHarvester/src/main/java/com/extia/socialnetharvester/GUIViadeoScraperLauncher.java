@@ -22,10 +22,11 @@ import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.context.support.GenericApplicationContext;
 
-import com.extia.socialnetharvester.http.viadeo.ScraperSystemFilesFactory;
-import com.extia.socialnetharvester.http.viadeo.ViadeoUserSettings;
+import com.extia.socialnetharvester.business.ScraperException;
+import com.extia.socialnetharvester.business.ScraperSystemFilesFactory;
+import com.extia.socialnetharvester.business.ViadeoUserSettings;
+import com.extia.socialnetharvester.io.CSVFileIO;
 import com.extia.socialnetharvester.io.ViadeoUserSettingsIO;
-import com.extia.socialnetharvester.io.csv.CSVFileIO;
 import com.extia.socialnetharvester.ui.controller.GUIViadeoScrapper;
 import com.extia.socialnetharvester.ui.controller.GUIViadeoScrappingSettings;
 

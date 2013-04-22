@@ -10,7 +10,8 @@ import javax.xml.xpath.XPathExpressionException;
 import org.apache.log4j.Logger;
 import org.xml.sax.SAXException;
 
-import com.extia.socialnetharvester.http.viadeo.ViadeoScraper;
+import com.extia.socialnetharvester.business.ScraperException;
+import com.extia.socialnetharvester.business.ViadeoScraper;
 
 public class ViadeoScrapperLauncher {
 	

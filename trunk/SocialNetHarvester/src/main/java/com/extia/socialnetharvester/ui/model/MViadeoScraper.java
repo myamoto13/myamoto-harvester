@@ -6,7 +6,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import com.extia.socialnetharvester.http.viadeo.ViadeoScraper;
+import com.extia.socialnetharvester.business.ViadeoScraper;
 
 public class MViadeoScraper {
 	
