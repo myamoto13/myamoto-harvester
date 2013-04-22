@@ -22,11 +22,11 @@
 	<bean class="com.extia.socialnetharvester.business.ViadeoScraper" id="viadeoScraper" name="viadeoScraper" />
 	<bean class="com.extia.socialnetharvester.business.ScraperSystemFilesFactory" id="systemFilesFactory" name="systemFilesFactory" />
 	
-	<bean class="com.extia.socialnetharvester.io.ScrapingHistoryXmlIO" id="scrapingHistoryXmlIO" name="scrapingHistoryXmlIO" /> 
 	<bean class="com.extia.socialnetharvester.io.ViadeoUserSettingsIO" id="settingsIO" name="settingsIO" />
-	<bean class="com.extia.socialnetharvester.io.csv.CSVFileIO" id="cSVFileWriterResult" name="cSVFileWriterResult" />
-	<bean class="com.extia.socialnetharvester.io.csv.CSVFileIO" id="cSVFileWriterKeywordReport" name="cSVFileWriterKeywordReport" />
-	<bean class="com.extia.socialnetharvester.io.csv.CSVKeywordReportIO" id="cSVKeywordReportIO" name="cSVKeywordReportIO" />
-	<bean class="com.extia.socialnetharvester.io.csv.CSVPersonListIO" id="cSVWriterViadeoPersonList" name="cSVWriterViadeoPersonList" />
+	<bean class="com.extia.socialnetharvester.io.CSVFileIO" id="cSVFileWriterResult" name="cSVFileWriterResult" />
+	<bean class="com.extia.socialnetharvester.io.CSVFileIO" id="cSVFileWriterKeywordReport" name="cSVFileWriterKeywordReport" />
+	<bean class="com.extia.socialnetharvester.business.CSVKeywordReportIO" id="cSVKeywordReportIO" name="cSVKeywordReportIO" />
+	<bean class="com.extia.socialnetharvester.business.CSVPersonListIO" id="cSVWriterViadeoPersonList" name="cSVWriterViadeoPersonList" />
+	<bean class="com.extia.socialnetharvester.business.ScrapingHistoryXmlIO" id="scrapingHistoryXmlIO" name="scrapingHistoryXmlIO" /> 
 	
 </beans>
