@@ -8,8 +8,8 @@ import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
-import com.extia.socialnetharvester.ScraperException;
-import com.extia.socialnetharvester.http.viadeo.ViadeoUserSettings;
+import com.extia.socialnetharvester.business.ScraperException;
+import com.extia.socialnetharvester.business.ViadeoUserSettings;
 
 public class ViadeoUserSettingsIO {
 	

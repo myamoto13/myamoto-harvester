@@ -6,11 +6,11 @@ import org.jsoup.Connection.Method;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.extia.socialnetharvester.data.ScrapingHistory;
-import com.extia.socialnetharvester.data.UrlConnectionWrapper;
-import com.extia.socialnetharvester.http.viadeo.ScraperSystemFilesFactory;
-import com.extia.socialnetharvester.http.viadeo.ViadeoUserSettings;
-import com.extia.socialnetharvester.io.ScrapingHistoryXmlIO;
+import com.extia.socialnetharvester.business.ScraperSystemFilesFactory;
+import com.extia.socialnetharvester.business.ScrapingHistoryXmlIO;
+import com.extia.socialnetharvester.business.ViadeoUserSettings;
+import com.extia.socialnetharvester.business.data.ScrapingHistory;
+import com.extia.socialnetharvester.business.data.UrlConnectionWrapper;
 
 
 public class TestHistoryIO {

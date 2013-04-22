@@ -19,9 +19,8 @@
 	<bean class="com.extia.socialnetharvester.ui.model.MViadeoScraper" id="mViadeoScraper" name="mViadeoScraper" />
 	<bean class="com.extia.socialnetharvester.ui.model.MViadeoScrapingSettings" id="mViadeoScrapingSettings" name="mViadeoScrapingSettings" />
 	
-	<bean class="com.extia.socialnetharvester.http.viadeo.ViadeoScraper" id="viadeoScraper" name="viadeoScraper" />
-	<bean class="com.extia.socialnetharvester.http.viadeo.ScraperSystemFilesFactory" id="systemFilesFactory" name="systemFilesFactory" />
-	<bean class="com.extia.socialnetharvester.http.viadeo.ViadeoProperties" id="viadeoProperties" name="viadeoProperties" />
+	<bean class="com.extia.socialnetharvester.business.ViadeoScraper" id="viadeoScraper" name="viadeoScraper" />
+	<bean class="com.extia.socialnetharvester.business.ScraperSystemFilesFactory" id="systemFilesFactory" name="systemFilesFactory" />
 	
 	<bean class="com.extia.socialnetharvester.io.ScrapingHistoryXmlIO" id="scrapingHistoryXmlIO" name="scrapingHistoryXmlIO" /> 
 	<bean class="com.extia.socialnetharvester.io.ViadeoUserSettingsIO" id="settingsIO" name="settingsIO" />

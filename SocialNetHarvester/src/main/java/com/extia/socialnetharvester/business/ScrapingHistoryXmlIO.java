@@ -1,4 +1,4 @@
-package com.extia.socialnetharvester.io;
+package com.extia.socialnetharvester.business;
 import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
@@ -30,11 +30,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import com.extia.socialnetharvester.ScraperException;
-import com.extia.socialnetharvester.data.ScrapingHistory;
-import com.extia.socialnetharvester.data.UrlConnectionWrapper;
-import com.extia.socialnetharvester.http.viadeo.ScraperSystemFilesFactory;
-import com.extia.socialnetharvester.http.viadeo.ViadeoUserSettings;
+import com.extia.socialnetharvester.business.data.ScrapingHistory;
+import com.extia.socialnetharvester.business.data.UrlConnectionWrapper;
 
 public class ScrapingHistoryXmlIO {
 	
