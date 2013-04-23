@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+	<context:component-scan base-package="com.extia" />
+	
+	<bean class="com.extia.socialnetharvester.GUIViadeoScraperLauncher" id="guiLauncher" name="guiLauncher" />
+	
+	<bean class="com.extia.socialnetharvester.ui.controller.GUIViadeoScrapper" id="guiScraper" name="guiScraper" init-method="init"/>
+	<bean class="com.extia.socialnetharvester.ui.controller.GUIViadeoScrappingSettings" id="guiSettings" name="guiSettings" init-method="init" />
+
+	<bean class="com.extia.socialnetharvester.ui.view.VViadeoScraper" id="vViadeoScraper" name="vViadeoScraper" />
+	<bean class="com.extia.socialnetharvester.ui.view.VViadeoScrapingSettings" id="vViadeoScrapingSettings" name="vViadeoScrapingSettings" />
+	
+	<bean class="com.extia.socialnetharvester.ui.model.MViadeoScraper" id="mViadeoScraper" name="mViadeoScraper" />
+	<bean class="com.extia.socialnetharvester.ui.model.MViadeoScrapingSettings" id="mViadeoScrapingSettings" name="mViadeoScrapingSettings" />
+	
+	<bean class="com.extia.socialnetharvester.business.ViadeoScraper" id="viadeoScraper" name="viadeoScraper" />
+	<bean class="com.extia.socialnetharvester.business.ScraperSystemFilesFactory" id="systemFilesFactory" name="systemFilesFactory" />
+	
+	<bean class="com.extia.socialnetharvester.io.ViadeoUserSettingsIO" id="settingsIO" name="settingsIO" />
+	<bean class="com.extia.socialnetharvester.io.CSVFileIO" id="cSVFileWriterResult" name="cSVFileWriterResult" />
+	<bean class="com.extia.socialnetharvester.io.CSVFileIO" id="cSVFileWriterKeywordReport" name="cSVFileWriterKeywordReport" />
+	<bean class="com.extia.socialnetharvester.business.CSVKeywordReportIO" id="cSVKeywordReportIO" name="cSVKeywordReportIO" />
+	<bean class="com.extia.socialnetharvester.business.CSVPersonListIO" id="cSVWriterViadeoPersonList" name="cSVWriterViadeoPersonList" />
+	<bean class="com.extia.socialnetharvester.business.ScrapingHistoryXmlIO" id="scrapingHistoryXmlIO" name="scrapingHistoryXmlIO" /> 
+	
+</beans>
