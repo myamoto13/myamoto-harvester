@@ -61,13 +61,9 @@ public class ViadeoScraper {
 	
 	@Resource(name="scrapingHistoryXmlIO")
 	private ScrapingHistoryXmlIO scrappingHistoryXml;
-	private ScrapingHistory history;
 	
 	@Resource(name="userSettings")
 	private ViadeoUserSettings scrappingSettings;
-	private Set<String> nameSet;
-	private List<ScrapingProgressListener> scrapingProgressListenerList;
-	private Map<UrlConnectionWrapper, Document> domBufferMap;
 	
 	@Resource(name="systemFilesFactory")
 	private ScraperSystemFilesFactory systemFilesFactory;
@@ -78,8 +74,11 @@ public class ViadeoScraper {
 	@Resource(name="cSVWriterViadeoPersonList")
 	private CSVPersonListIO cSVWriterResult;
 	
+	private ScrapingHistory history;
+	private Set<String> nameSet;
+	private List<ScrapingProgressListener> scrapingProgressListenerList;
+	private Map<UrlConnectionWrapper, Document> domBufferMap;
 	private boolean interruptFlag;
-	
 	private AvancementManager avancementManager;
 
 	public AvancementManager getAvancementManager() {
